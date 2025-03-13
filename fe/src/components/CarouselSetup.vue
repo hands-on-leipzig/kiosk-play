@@ -3,29 +3,19 @@ import {ref} from "vue";
 import SlideThumb from "./SlideThumb.vue";
 import {faker} from '@faker-js/faker';
 import draggable from "vuedraggable";
+import {Slide} from "../model/slide.ts";
+import {ImageSlideContent} from "../model/imageSlideContent.js";
 
 const slides = ref([
-  {
-    title: 'John Doe',
-    id: 1,
-  },
-  {
-    title: 'Britney',
-    id: 2
-  },
-  {
-    title: 'Shakira',
-    id: 3
-  },
+    new Slide( 1, 'FLL', new ImageSlideContent('https://www.first-lego-league.org/files/relaunch2022/theme/layout/fll/logo/vertical/FIRSTLego_IconVert_RGB.png')),
+    new Slide( 2, 'Britney'),
+    new Slide( 3, 'Shakira'),
 ]);
 
 function addSlide() {
 
   const randomName = ref(faker.person.fullName());
-  slides.value.push({
-    title: randomName,
-    id: slides.value.length + 1,
-  })
+  slides.value.push(new Slide(slides.value.length + 1, randomName));
 }
 
 const transitionTime = ref(15); // Default transition time in ms
@@ -33,6 +23,11 @@ const transitionEffect = ref("ease-in-out"); // Default transition effect
 
 function updateOrder() {
   console.log("Updated order:", slides); // Logs new order for debugging
+}
+
+function deleteSlide(slide) {
+  console.log("Deleting slide", slide.title);
+  slides.value = slides.value.filter(s => s.id !== slide.id);
 }
 </script>
 
@@ -62,7 +57,7 @@ function updateOrder() {
     <draggable v-model="slides" class="draggable-list" ghost-class="ghost" group="slides" item-key="id"
                @end="updateOrder">
       <template #item="{ element }">
-        <SlideThumb :title="element.title"></SlideThumb>
+        <SlideThumb :slide="element" @deleteSlide="deleteSlide(element)"></SlideThumb>
       </template>
     </draggable>
   </div>

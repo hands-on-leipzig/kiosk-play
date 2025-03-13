@@ -14,9 +14,9 @@ jobs:
       #- name: Update composer
       #  run: php composer.phar update
       - name: Install npm
-        run: cd jurytimer && npm install
+        run: cd kiosk-play && npm install
       - name: Build vue app
-        run: cd jurytimer && npm run build
+        run: cd kiosk-play && npm run build
       - name: Deploy
         # You may pin to the exact commit or the version.
         # uses: sand4rt/ftp-deployer@518beaad91d1b18fd55a69321de7ed89080d2ae3

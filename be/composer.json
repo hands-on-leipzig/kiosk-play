@@ -1,0 +1,19 @@
+{
+  "name": "kiosk-carousel/be",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "jakub.stribrny",
+      "email": "mail@jakub.st"
+    }
+  ],
+  "require": {
+    "firebase/php-jwt": "^6.11",
+    "vlucas/phpdotenv": "^5.6",
+    "jumbojett/openid-connect-php": "^1.0",
+    "ext-curl": "*",
+    "ext-json": "*"
+  }
+}

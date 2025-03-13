@@ -14,9 +14,9 @@ jobs:
       #- name: Update composer
       #  run: php composer.phar update
       - name: Install npm
-        run: cd kiosk-play && npm install
+        run: cd npm install
       - name: Build vue app
-        run: cd kiosk-play && npm run build
+        run: cd npm run build
       - name: Deploy
         # You may pin to the exact commit or the version.
         # uses: sand4rt/ftp-deployer@518beaad91d1b18fd55a69321de7ed89080d2ae3
@@ -28,5 +28,5 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PW }}
           remote_folder: /
-          local_folder: kiosk-play/dist
+          local_folder: dist
           #exclude:        

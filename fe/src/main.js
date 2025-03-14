@@ -1,4 +1,16 @@
 import Auth from "./components/Auth.vue";
+import './assets/main.css'
+
+import {createApp} from 'vue'
+import App from './App.vue'
+import VueSplide from "@splidejs/vue-splide";
+import {createRouter, createWebHistory} from 'vue-router'
+import Carousel from "./components/Carousel.vue";
+import CarouselSetup from "./components/CarouselSetup.vue";
+
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {faEarth, faImage, faPlusCircle, faTrashCan} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
 const KEYCLOAK_URL = "https://sso.hands-on-technology.org";
 const REALM = "master";
@@ -13,24 +25,11 @@ const redirectToKeycloak = () => {
 const checkAuth = () => {
     const token = localStorage.getItem("jwt_token");
     if (!token) {
-        redirectToKeycloak();
+        //redirectToKeycloak();
     }
 };
 
 checkAuth();
-
-import './assets/main.css'
-
-import {createApp} from 'vue'
-import App from './App.vue'
-import VueSplide from "@splidejs/vue-splide";
-import {createMemoryHistory, createRouter} from 'vue-router'
-import Carousel from "./components/Carousel.vue";
-import CarouselSetup from "./components/CarouselSetup.vue";
-
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {faEarth, faImage, faPlusCircle, faTrashCan} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
 library.add(faPlusCircle, faTrashCan, faImage, faEarth);
 
@@ -41,7 +40,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createMemoryHistory(),
+    history: createWebHistory(),
     routes,
 })
 

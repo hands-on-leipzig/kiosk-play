@@ -18,16 +18,18 @@ export class Slide {
         return arr.map(obj => {
             let content: SlideContent;
 
-            switch (obj['content'].type) {
-                case "ImageSlideContent":
-                    content = new ImageSlideContent(obj['content'].imageUrl);
-                    break;
-                case "RobotGameSlideContent":
-                    content = new RobotGameSlideContent();
-                    break;
-                default:
-                    console.error("Unknown slide content type: " + obj['content'].type);
-                    content = null;
+            if (obj['content']) {
+                switch (obj['content'].type) {
+                    case "ImageSlideContent":
+                        content = new ImageSlideContent(obj['content'].imageUrl);
+                        break;
+                    case "RobotGameSlideContent":
+                        content = new RobotGameSlideContent();
+                        break;
+                    default:
+                        console.error("Unknown slide content type: " + obj['content'].type);
+                        content = null;
+                }
             }
             return new Slide(obj['id'], obj['title'], content);
         });

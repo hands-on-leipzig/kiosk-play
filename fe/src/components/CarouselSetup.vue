@@ -1,16 +1,12 @@
 <script setup>
-import {ref} from "vue";
+import {inject, ref} from "vue";
 import SlideThumb from "./SlideThumb.vue";
 import {faker} from '@faker-js/faker';
 import draggable from "vuedraggable";
 import {Slide} from "../model/slide.ts";
-import {ImageSlideContent} from "../model/imageSlideContent.js";
 
-const slides = ref([
-    new Slide( 1, 'FLL', new ImageSlideContent('https://www.first-lego-league.org/files/relaunch2022/theme/layout/fll/logo/vertical/FIRSTLego_IconVert_RGB.png')),
-    new Slide( 2, 'Britney'),
-    new Slide( 3, 'Shakira'),
-]);
+const socket = inject('websocket');
+const slides = socket.slides;
 
 function addSlide() {
 

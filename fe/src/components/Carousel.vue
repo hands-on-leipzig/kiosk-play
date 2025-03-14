@@ -4,6 +4,7 @@ import {inject, ref} from "vue";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 
 const socket = inject('websocket');
+socket.registerClient();
 socket.addListener((msg) => {
   console.log("msg in carusell: ", msg);
   // TODO do some specific listening here (e.g. pausing or setting the delay)

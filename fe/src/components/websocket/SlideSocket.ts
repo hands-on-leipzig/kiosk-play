@@ -1,21 +1,15 @@
 import {Slide} from "../../model/slide.js";
 import {ImageSlideContent} from "../../model/imageSlideContent.js";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import type {Ref} from "vue";
 
 const listeners = [];
-const websocket = new WebSocket('wss://echo.websocket.org');
+const websocket = new WebSocket('ws://localhost:3000/ws'); // local testserver
 
-export const slides: Ref = ref([]);
+export const slides: Ref<Slide[]> = ref([]);
 
 websocket.onopen = () => {
   console.log('Connected to websocket');
-  // Register the client to the server
-  // Here we should send some device information for the server to identify the client
-  websocket.send(JSON.stringify({ type: 'register', clientId: navigator.userAgent }));
-  setTimeout(() => {
-    websocket.send(JSON.stringify({ type: 'setSlides', slides: [new Slide(1, 'Testbild', new ImageSlideContent('https://www.first-lego-league.org/files/relaunch2022/theme/layout/fll/logo/vertical/FIRSTLego_IconVert_RGB.png'))] }));
-  }, 2000);
 }
 
 websocket.onmessage = event => {
@@ -34,6 +28,19 @@ websocket.onerror = error => {
   console.error('WebSocket error:', error);
 }
 
+watch(slides, (newSlides, oldSlides) => {
+  // TODO: Don't trigger update on setSlides from the server (how?)
+  websocket.send(JSON.stringify({ type: 'saveSlides', slides: newSlides }));
+}, {deep: true});
+
+export function registerClient() {
+  // Register the client to the server
+  // Here we should send some device information for the server to identify the client
+  websocket.addEventListener('open', () => {
+    websocket.send(JSON.stringify({ type: 'register', clientId: navigator.userAgent }));
+  });
+}
+
 export function addListener(listener) {
   listeners.push(listener);
 }
@@ -42,7 +49,10 @@ function handleEvent(event) {
   switch (event.type) {
     case 'setSlides':
         // Use custom deserialize function for slides
-        slides.value = Slide.fromArray(event.slides);
+        console.log('Received slides:', event.slides);
+        const newSlides = Slide.fromArray(event.slides);
+        console.log('Setting slides:', newSlides);
+        slides.value = newSlides;
         break;
   }
 }

@@ -1,15 +1,15 @@
 <script setup>
 import '@splidejs/vue-splide/css';
-import {ref} from "vue";
-import {Slide} from "../model/slide.js";
+import {inject, ref} from "vue";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
-import {ImageSlideContent} from "../model/imageSlideContent.js";
-import {RobotGameSlideContent} from "../model/robotGameSlideContent.js";
 
-const slides = ref([
-  // new Slide(1, 'Testbild', new ImageSlideContent('https://www.first-lego-league.org/files/relaunch2022/theme/layout/fll/logo/vertical/FIRSTLego_IconVert_RGB.png')),
-  new Slide(2, 'Robot Game Scores', new RobotGameSlideContent()),
-]);
+const socket = inject('websocket');
+socket.addListener((msg) => {
+  console.log("msg in carusell: ", msg);
+  // TODO do some specific listening here (e.g. pausing or setting the delay)
+});
+
+let slides = ref(socket.slides);
 </script>
 
 <template>
@@ -23,7 +23,7 @@ const slides = ref([
     pauseOnFocus: false,
   }" aria-label="My Favorite Images">
     <SplideSlide v-for="slide in slides" :key="slide.id">
-      <SlideContentRenderer :slide="slide" />
+      <SlideContentRenderer :slide="slide"/>
     </SplideSlide>
   </Splide>
 </template>

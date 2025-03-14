@@ -1,18 +1,21 @@
 <script setup>
+import {Slide} from "../model/slide.ts";
+import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
+
 defineProps({
-  title: String
+  slide: Slide
 });
 
-function deleteSlide() {
-
-}
+const emit = defineEmits(['deleteSlide']);
 </script>
 
 <template>
   <div class="slide-thumb">
-    <span class="button-row"><fa @click="deleteSlide()" :icon="['fas', 'trash-can']"></fa></span>
-    <div class="thumb"></div>
-    <span>{{ title }}</span>
+    <span class="button-row"><fa @click="emit('deleteSlide');" :icon="['fas', 'trash-can']"></fa></span>
+    <div class="thumb">
+      <SlideContentRenderer :slide="slide"></SlideContentRenderer>
+    </div>
+    <span>{{ slide.title }}</span>
   </div>
 </template>
 

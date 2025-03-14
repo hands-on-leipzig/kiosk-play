@@ -1,5 +1,4 @@
 <script setup>
-import { defineEmits } from 'vue';
 import {Slide} from "../model/slide.ts";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 

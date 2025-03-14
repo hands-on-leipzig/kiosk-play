@@ -1,5 +1,4 @@
 <script setup>
-import {defineProps} from 'vue';
 import {ImageSlideContent} from '../../model/imageSlideContent.ts';
 
 const props = defineProps({

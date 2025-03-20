@@ -16,5 +16,11 @@
     "ext-curl": "*",
     "ext-json": "*",
     "ext-mysqli": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "model\\": "model",
+      "handlers\\": "handlers"
+    }
   }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace model;
-
+require_once 'vendor/autoload.php';
 class Screen extends BaseModel
 {
     public $table = "screen";

@@ -4,10 +4,7 @@ namespace model;
 
 class BaseModel
 {
-    /**
-     * @var \MysqlDB
-     */
-    public $db;
+    public MysqlDB $db;
 
     public function __construct($db)
     {

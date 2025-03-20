@@ -12,13 +12,15 @@ $h = new ApiHandler();
 $h->post('/api/events/$event_id/screens/register', function($event_id) {
     global $h, $db;
     $screen = new Screen($db);
-    $screen->register($event_id);
+    echo $screen->register($event_id);
 });
 
 $h->get('/api/events/$event_id/screens', function($event_id) {
     global $h, $db;
     $screen = new Screen($db);
-    $screen->show_screens($event_id);
+    foreach ($screen->show_screens($event_id) as $screen) {
+        print "$screen->id: $screen->name<br>";
+    }
 });
 /*
 post('/api/events/$event_id/screens/$screen_id/slides', function($event_id, $screen_id) {

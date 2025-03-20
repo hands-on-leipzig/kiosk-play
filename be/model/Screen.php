@@ -12,7 +12,10 @@ class Screen extends BaseModel
 
     public function register($event_id)
     {
-        $this->db->insertInto($this->table, ["event"], [$event_id]);
+        if (!isset($_POST["name"])) {
+            return "500";
+        }
+        return $this->db->insertInto($this->table, ["event", "name"], [$event_id, $_POST["name"]]);
     }
 
     public function show_screens($event_id): array

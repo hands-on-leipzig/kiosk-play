@@ -1,5 +1,7 @@
 <?php
+
 namespace model;
+
 use Dotenv\Dotenv;
 use mysqli;
 use mysqli_result;
@@ -143,7 +145,7 @@ class MysqlDB
      *
      * @return string
      */
-    function insertInto(string $tableName, array $columns, array $values)
+    function insertInto(string $tableName, array $columns, array $values): int
     {
         $this->query = 'INSERT INTO ' . $tableName . ' (';
         foreach ($columns as $column) {

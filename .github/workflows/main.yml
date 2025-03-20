@@ -17,9 +17,7 @@ jobs:
         run: npm install
       - name: Build vue app
         run: npm run build
-      - name: Deploy
-        # You may pin to the exact commit or the version.
-        # uses: sand4rt/ftp-deployer@518beaad91d1b18fd55a69321de7ed89080d2ae3
+      - name: Deploy FE
         uses: sand4rt/ftp-deployer@v1.8
         with:
           sftp: true
@@ -29,4 +27,13 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           remote_folder: /
           local_folder: dist
-          #exclude:        
+      - name: Deploy BE
+        uses: sand4rt/ftp-deployer@v1.8
+        with:
+          sftp: true
+          host: sftp.dedi137.your-server.de
+          port: 22
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          remote_folder: /be/
+          local_folder: be

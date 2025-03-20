@@ -4,7 +4,7 @@ use handlers\ApiHandler;
 use model\Screen;
 use model\MysqlDB;
 $db = new MysqlDB();
-$h = new ApiHandler($db);
+$h = new ApiHandler();
 
 $h->post('/api/events/$event_id/screens/register', function($event_id) {
     global $h, $db;

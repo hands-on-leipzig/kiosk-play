@@ -1,6 +1,9 @@
 <?php
+namespace model;
+use Dotenv\Dotenv;
+use mysqli_result;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 class MysqlDB

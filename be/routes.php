@@ -1,9 +1,12 @@
 <?php
+require_once 'vendor/autoload.php';
 
 use handlers\ApiHandler;
-use model\Screen;
 use model\MysqlDB;
+use model\Screen;
+
 $db = new MysqlDB();
+$db->dbConnect();
 $h = new ApiHandler();
 
 $h->post('/api/events/$event_id/screens/register', function($event_id) {
@@ -26,4 +29,4 @@ post('/api/events/$event_id/slides', function($event_id) {
     save_slides($event_id);
 });
 */
-$h->any('/404','404.php');
+$h->any('/404','../404.php');

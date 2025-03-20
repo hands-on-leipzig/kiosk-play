@@ -1,9 +1,12 @@
 <?php
 namespace model;
 use Dotenv\Dotenv;
+use mysqli;
 use mysqli_result;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
+require_once 'vendor/autoload.php';
+
+$dotenv = Dotenv::createImmutable(dirname(__DIR__, 1), "conf.env");
 $dotenv->load();
 
 class MysqlDB

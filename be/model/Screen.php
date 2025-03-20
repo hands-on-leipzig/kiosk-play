@@ -18,8 +18,8 @@ class Screen extends BaseModel
         return $this->db->insertInto($this->table, ["event", "name"], [$event_id, $_POST["name"]]);
     }
 
-    public function show_screens($event_id): array
+    public function show_screens($event_id): false|string
     {
-        return $this->db->selectAsObj($this->table, "event" ,"=", $event_id);
+        return json_encode($this->db->selectAsObj($this->table, "event" ,"=", $event_id));
     }
 }

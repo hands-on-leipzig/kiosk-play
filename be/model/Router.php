@@ -1,8 +1,10 @@
 <?php
 
-namespace handlers;
+namespace model;
 
-class ApiHandler
+use Exception;
+
+class Router
 {
     function get($route, $path_to_include)
     {
@@ -87,5 +89,24 @@ class ApiHandler
         }
         include_once __DIR__ . "/$path_to_include";
         exit();
+    }
+
+    /**
+     * @throws Exception
+     */
+    function auth()
+    {
+        if (!isset($_SERVER["HTTP_AUTHORIZATION"])) {
+            throw new Exception("Unauthorized", 403);
+        }
+
+        $token = str_replace("Bearer ", "",  $_SERVER['HTTP_AUTHORIZATION']);
+        list($payload, $signature) = explode(".", $token);
+
+        $expected_signature = base64_encode(hash_hmac("sha256", base64_decode($payload), $_ENV["JWT_SECRET"], true));
+
+        if ($signature !== $expected_signature) {
+            throw new Exception("Invalid token", 401);
+        }
     }
 }

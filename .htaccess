@@ -4,7 +4,7 @@ RewriteEngine On
 #RewriteCond $0 !^excludedir/
 #RewriteCond $0 ^api/
 #RewriteCond $0 api/
-RewriteRule ^api/(.*)$ be/routes.php [QSA,L]
+RewriteRule ^api/(.*)$ be/handlers/RouteHandler.php [QSA,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

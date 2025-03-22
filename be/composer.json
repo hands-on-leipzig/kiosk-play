@@ -16,12 +16,14 @@
     "workerman/workerman": "^5.1.0",
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-mysqli": "*"
+    "ext-mysqli": "*",
+    "ext-http": "*"
   },
   "autoload": {
     "psr-4": {
       "model\\": "model",
-      "handlers\\": "handlers"
+      "handlers\\": "handlers",
+      "controllers\\": "controllers"
     }
   }
 }

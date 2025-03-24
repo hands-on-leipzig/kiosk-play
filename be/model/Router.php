@@ -12,34 +12,40 @@ class Router
             $this->route($route, $path_to_include);
         }
     }
+
     function post($route, $path_to_include)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->route($route, $path_to_include);
         }
     }
+
     function put($route, $path_to_include)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
             $this->route($route, $path_to_include);
         }
     }
+
     function patch($route, $path_to_include)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
             $this->route($route, $path_to_include);
         }
     }
+
     function delete($route, $path_to_include)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
             $this->route($route, $path_to_include);
         }
     }
+
     function any($route, $path_to_include)
     {
         $this->route($route, $path_to_include);
     }
+
     function route($route, $path_to_include)
     {
         $callback = $path_to_include;
@@ -94,19 +100,29 @@ class Router
     /**
      * @throws Exception
      */
-    function auth()
+    function auth(): mixed
     {
         if (!isset($_SERVER["HTTP_AUTHORIZATION"])) {
-            throw new Exception("Unauthorized", 403);
+            throw new Exception("Unauthorized - Header missing", 403);
         }
 
-        $token = str_replace("Bearer ", "",  $_SERVER['HTTP_AUTHORIZATION']);
-        list($payload, $signature) = explode(".", $token);
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+        $token = str_replace("Bearer ", "", $authHeader);
+        $parts = explode(".", $token);
 
-        $expected_signature = base64_encode(hash_hmac("sha256", base64_decode($payload), $_ENV["JWT_SECRET"], true));
-
-        if ($signature !== $expected_signature) {
-            throw new Exception("Invalid token", 401);
+        if (count($parts) !== 3) {
+            throw new Exception("Wrong JWT format", 500);
         }
+
+        list($header, $payload, $signature) = $parts;
+
+        $expected_signature = hash_hmac("sha256", "$header.$payload", $_ENV["JWT_SECRET"], true);
+        $expected_signature = rtrim(strtr(base64_encode($expected_signature), '+/', '-_'), '=');
+
+        if (!hash_equals($expected_signature, $signature)) {
+            throw new Exception("Unauthorized - Invalid JWT signature", 403);
+        }
+
+        return json_decode(base64_decode($payload), true);
     }
 }

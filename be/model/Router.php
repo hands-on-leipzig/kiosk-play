@@ -6,7 +6,7 @@ use Exception;
 
 class Router
 {
-    function get($route, $path_to_include)
+    function get($route, $path_to_include, $needsauth = true)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $this->route($route, $path_to_include);

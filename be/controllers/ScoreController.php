@@ -73,12 +73,14 @@ $count = "";
             }
 
             // Highlight
-            foreach ($results["rounds"][$round] as $id => $team) {
-                $team["scores"] = array_map(function ($score) use ($maxPoints, $id) {
-                    $score["highlight"] = $score["points"] == $maxPoints[$id];
-                    return $score;
-                }, $team["scores"]);
-            }
+            /*foreach ($results["rounds"][$round] as $round) {
+                foreach ($round as $id => $team) {
+                    $team["scores"] = array_map(function ($score) use ($maxPoints, $id) {
+                        $score["highlight"] = $score["points"] == $maxPoints[$id];
+                        return $score;
+                    }, $team["scores"]);
+                }
+            }*/
 
         }
         $db->dbDisconnect();

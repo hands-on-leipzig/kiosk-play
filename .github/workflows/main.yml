@@ -33,12 +33,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: Strohgelaender/screen
-          path: /screen
+          path: ./screen
       - name: Install Screen npm npm
-        working-directory: /screen
+        working-directory: ./screen
         run: npm install
       - name: Build Screen
-        working-directory: /screen
+        working-directory: ./screen
         run: npm run build
       - name: Copy Screen result
         run: cp -r /screen/out /be/screen

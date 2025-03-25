@@ -155,7 +155,7 @@ export default function ScoreScreenPage() {
     }
 
     function sortScores(team: Team): number[] {
-        return team.scores.map((score: Score) => +score.points).sort((a, b) => b - a)
+        return team.scores.map((score: Score) => +score.points).sort((a, b) => b - a);
     }
 
     // const teams = competition?.categories[0].teams;

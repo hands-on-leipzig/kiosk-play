@@ -73,7 +73,7 @@ $count = "";
                 //$results["rounds"][$round][$o->id]["scores"][] = ["points" => $o->points, "highlight" => false];
                 // qmax($results["rounds"][$round][$o->id]["scores"])
             }
-            $result["rounds"][$round][] = $team;
+            $results["rounds"][$round][] = $team;
         }
         $db->dbDisconnect();
         return $results;

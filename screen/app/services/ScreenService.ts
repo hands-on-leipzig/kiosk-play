@@ -53,7 +53,7 @@ export async function fetchBackgroundImage(immageUrl?: string): Promise<string |
         return null;
     }
     try {
-        const response = await fetch(BASE_URL + immageUrl);
+        const response = await fetch(immageUrl);
         const blob = await response.blob();
         return URL.createObjectURL(blob);
     } catch (error) {

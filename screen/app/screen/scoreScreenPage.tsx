@@ -32,10 +32,10 @@ export default function ScoreScreenPage() {
             .catch((error) => setError(error.message)); */
 
         // Load DACH data
-        fetch('/api/events/1620/data/rg-scores')
+        fetch('https://kiosk.hands-on-technology.org/api/events/1620/data/rg-scores')
             .then((response) => response.json())
             .then((data) => {
-                setCompetition(new Competition(0, 1, 'DACH-Finale Siegen', [data]));
+                setCompetition(new Competition(0, 1, data.name, [data]));
             })
             .catch((error) => setError(error.message));
 
@@ -136,7 +136,7 @@ export default function ScoreScreenPage() {
     teams = assignRanks(teams);
 
     function assignRanks(teams: Team[]): Team[] {
-        if (teams.length === 0) {
+        if (!teams || teams.length === 0) {
             return teams;
         }
 

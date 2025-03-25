@@ -34,7 +34,7 @@ jobs:
       - name: Build screen app
         working-directory: screen
         run: npm run build
-        name: Copy Screen result
+      - name: Copy Screen result
         run: cp -r /screen/out ./be/screen
 
       - name: Deploy BE

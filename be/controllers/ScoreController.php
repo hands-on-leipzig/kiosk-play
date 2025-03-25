@@ -73,9 +73,9 @@ $count = "";
             }
 
             // Highlight
-            foreach ($results["rounds"][$round] as $team) {
-                $team["scores"] = array_map(function ($score) use ($maxPoints, $team) {
-                    $score["highlight"] = $score["points"] == $maxPoints[$team->id];
+            foreach ($results["rounds"][$round] as $id => $team) {
+                $team["scores"] = array_map(function ($score) use ($maxPoints, $id) {
+                    $score["highlight"] = $score["points"] == $maxPoints[$id];
                     return $score;
                 }, $team["scores"]);
             }

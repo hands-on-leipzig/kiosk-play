@@ -17,7 +17,24 @@ jobs:
         run: npm install
       - name: Build vue app
         run: npm run build
-      - name: Deploy FE
+#      - name: Deploy FE
+#        uses: sand4rt/ftp-deployer@v1.8
+#        with:
+#          sftp: true
+#          host: sftp.dedi137.your-server.de
+#          port: 22
+#          username: ${{ secrets.FTP_USER }}
+#          password: ${{ secrets.FTP_PASS }}
+#          remote_folder: /
+#          local_folder: dist
+
+      - name: Install screen npm
+        working-directory: screen
+        run: npm install
+      - name: Build screen app
+        working-directory: screen
+        run: npm run build
+      - name: Deploy Screen FE
         uses: sand4rt/ftp-deployer@v1.8
         with:
           sftp: true
@@ -26,16 +43,7 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
           remote_folder: /
-          local_folder: dist
-
-      - name: Install screen nmp
-        working-directory: screen
-        run: npm install
-      - name: Build screen app
-        working-directory: screen
-        run: npm run build
-      - name: Copy Screen result
-        run: cp -r screen/out ./be/screen
+          local_folder: screen/out
 
       - name: Deploy BE
         uses: sand4rt/ftp-deployer@v1.8

@@ -11,8 +11,13 @@ import ScreenContainer from '../components/ScreenContainer';
 
 export default function ScoreScreenPage() {
     const searchParams = useSearchParams();
-    const rawId = searchParams.get('id') ?? '353';
-    const id = parseInt(rawId, 10);
+    // const rawId = searchParams.get('id') ?? '353';
+    // const id = parseInt(rawId, 10);
+
+    let round = searchParams.get('round')?.toUpperCase() ?? 'VR';
+    if (!['VR', 'AF', 'VF'].includes(round)) {
+        round = 'VR';
+    }
 
     const [competition, setCompetition] = useState<Competition | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -23,6 +28,9 @@ export default function ScoreScreenPage() {
     const [teamsPerPage, setTeamsPerPage] = useState(8);
     const [settings, setSettings] = useState<ScreenSettings | null>(null);
 
+    const TEST = 1620;
+    const FINAL = 1626;
+
     useEffect(() => {
         /*loadCompetition(id)
             .then((competition) => {
@@ -32,7 +40,7 @@ export default function ScoreScreenPage() {
             .catch((error) => setError(error.message)); */
 
         // Load DACH data
-        fetch('https://kiosk.hands-on-technology.org/api/events/1620/data/rg-scores')
+        fetch(`https://kiosk.hands-on-technology.org/api/events/${TEST}/data/rg-scores`)
             .then((response) => response.json())
             .then((data) => {
                 setCompetition(new Competition(0, 1, data.name, [data]));
@@ -49,7 +57,7 @@ export default function ScoreScreenPage() {
             .catch((error) => console.error('Error loading settings:', error));*/
         setSettings(dachScreenSettings);
         setTeamsPerPage(dachScreenSettings.teamsPerPage!);
-    }, [id]);
+    }, []);
 
     const advancePage = useCallback(() => {
         setCurrentIndex((prevIndex) => {
@@ -106,7 +114,7 @@ export default function ScoreScreenPage() {
     }
 
     // @ts-expect-error - different data structure when using kiosk API
-    const vr = competition?.categories[0]['rounds']['VR'];
+    const vr = competition?.categories[0]['rounds'][round];
     let teams =
         vr &&
         Object.keys(vr)
@@ -114,9 +122,10 @@ export default function ScoreScreenPage() {
                 const team = vr[key];
                 team.id = key;
 
-                const maxScore = sortScores(team)[0];
+                const scores = sortScores(team);
+                const maxScore = scores[0];
                 team.scores = team.scores.map((score: Score) => {
-                    score.highlight = +score.points === maxScore;
+                    score.highlight = +score.points === maxScore && maxScore > 0 && scores.length > 1;
                     return score;
                 });
 
@@ -135,23 +144,26 @@ export default function ScoreScreenPage() {
             });
     teams = assignRanks(teams);
 
-    function assignRanks(teams: Team[]): Team[] {
+    function assignRanks(teams: Team[] | undefined): Team[] | undefined {
         if (!teams || teams.length === 0) {
             return teams;
         }
 
         let rank = 1;
-        let prevScore = sortScores(teams[0])[0];
-        teams[0].rank = rank;
-        for (let i = 1; i < teams.length; i++) {
+        let prevScore = 0;
+        const result = [];
+        for (let i = 0; i < teams.length; i++) {
             const maxScore = sortScores(teams[i])[0];
             if (maxScore !== prevScore) {
                 rank = i + 1;
             }
             teams[i].rank = rank;
-            prevScore = maxScore;
+            if (maxScore > 0 || prevScore == 0) {
+                result.push(teams[i]);
+                prevScore = maxScore;
+            }
         }
-        return teams;
+        return result;
     }
 
     function sortScores(team: Team): number[] {
@@ -170,9 +182,15 @@ export default function ScoreScreenPage() {
                     <thead>
                         <tr>
                             <th className="px-4 py-2 border-b border-r border-white w-auto">Team</th>
-                            <th className="px-4 py-2 border-r border-b border-white text-center w-40">R I</th>
-                            <th className="px-4 py-2 border-r border-b border-white text-center w-40">R II</th>
-                            <th className="px-4 py-2 border-r border-b border-white text-center w-40">R III</th>
+                            { round === 'VR' ?
+                                <>
+                                <th className="px-4 py-2 border-r border-b border-white text-center w-40">R I</th>
+                                <th className="px-4 py-2 border-r border-b border-white text-center w-40">R II</th>
+                                <th className="px-4 py-2 border-r border-b border-white text-center w-40">R III</th>
+                                </>
+                            :
+                                <th className="px-4 py-2 border-r border-b border-white text-center w-60">Score</th>
+                            }
                             <th className="px-4 py-2 border-b border-white text-center w-40">Rank</th>
                         </tr>
                     </thead>

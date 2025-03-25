@@ -28,20 +28,14 @@ jobs:
           remote_folder: /
           local_folder: dist
 
-      # Clone Screen repository and build it
-      - name: Clone Screen repository
-        uses: actions/checkout@v4
-        with:
-          repository: Strohgelaender/screen
-          path: ./screen
-      - name: Install Screen npm npm
-        working-directory: ./screen
+      - name: Install screen nmp
+        working-directory: screen
         run: npm install
-      - name: Build Screen
-        working-directory: ./screen
+      - name: Build screen app
+        working-directory: screen
         run: npm run build
-      - name: Copy Screen result
-        run: cp -r ./screen/out ./be/screen
+        name: Copy Screen result
+        run: cp -r /screen/out ./be/screen
 
       - name: Deploy BE
         uses: sand4rt/ftp-deployer@v1.8

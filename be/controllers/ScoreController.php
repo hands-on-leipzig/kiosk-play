@@ -61,20 +61,28 @@ $count = "";
                 if ($o->points > $maxPoints[$ind]) {
                     $maxPoints[$ind] = $o->points;
                 }
-                $team = ["name" => $o->name, "scores" => []];
 
-                $team["scores"][] = [
+                $results["rounds"][$round][$o->id]["scores"][] = [
                     "points" => $o->points,
                     "highlight" => false,
                 ];
 
-                $results["rounds"][$round][] = $team;
+                $results["rounds"][$round][$o->id]["name"] = $o->name;
                 //$results["rounds"][$round][$o->id]["scores"][] = ["points" => $o->points, "highlight" => false];
                 // qmax($results["rounds"][$round][$o->id]["scores"])
             }
 
+            // Highlight
+            foreach ($results["rounds"][$round] as $team) {
+                $team["scores"] = array_map(function ($score) use ($maxPoints, $team) {
+                    $score["highlight"] = $score["points"] == $maxPoints[$team->id];
+                    return $score;
+                }, $team["scores"]);
+            }
+
         }
         $db->dbDisconnect();
+
         return $results;
     }
 }

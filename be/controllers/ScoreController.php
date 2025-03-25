@@ -50,6 +50,7 @@ $count = "";
 
             $maxPoints = [];
             $added = "";
+            $team = [];
             for ($i = 0; $i < $db->num_rows; $i++) {
                 $o = mysqli_fetch_object($result);
                 $ind = $o->id;
@@ -62,15 +63,17 @@ $count = "";
                     $maxPoints[$ind] = $o->points;
                 }
 
-                $results["rounds"][$round][$o->id]["scores"][] = [
+                $team["name"] = $o->name;
+
+                $team["scores"][] = [
                     "points" => $o->points,
                     "highlight" => false,
                 ];
-                $results["rounds"][$round][$o->id]["name"] = $o->name;
+
                 //$results["rounds"][$round][$o->id]["scores"][] = ["points" => $o->points, "highlight" => false];
                 // qmax($results["rounds"][$round][$o->id]["scores"])
-
             }
+            $result["rounds"][$round][] = $team;
         }
         $db->dbDisconnect();
         return $results;

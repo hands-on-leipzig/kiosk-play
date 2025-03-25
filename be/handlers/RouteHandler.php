@@ -4,7 +4,7 @@ namespace handlers;
 
 require_once '../vendor/autoload.php';
 
-use controllers\ScoreController;
+use controllers;
 use Exception;
 use model\MysqlDB;
 use model\Router;
@@ -14,10 +14,28 @@ $db = new MysqlDB();
 $db->dbConnect();
 $h = new Router();
 
+header("Access-Control-Allow-Origin: *");
+
+
 // open endpoints
+$h->post('/api/auth', function ($data) {
+    $t = new controllers\TokenController();
+    echo $t->getJWTToken($data);
+});
+
 $h->get('/api/events/$event_id/data/rg-scores', function ($event_id) {
-    $s = new ScoreController();
-    echo json_encode($s->getScore($event_id));
+    $s = new controllers\ScoreController();
+
+    try {
+        $scores = json_encode($s->getScores($event_id));
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+    if (json_validate($scores)) {
+        header("Content-Type: application/json");
+    }
+    echo $scores;
 });
 
 // endpoints needing authorization

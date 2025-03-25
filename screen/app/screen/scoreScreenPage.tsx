@@ -107,14 +107,14 @@ export default function ScoreScreenPage() {
 
     // @ts-expect-error - different data structure when using kiosk API
     const vr = competition?.categories[0]['rounds']['VR'];
-    const teams =
+    let teams =
         vr &&
         Object.keys(vr)
             ?.map((key) => {
                 const team = vr[key];
                 team.id = key;
 
-                const maxScore = Math.max(...team.scores.map((score: Score) => +score.points));
+                const maxScore = sortScores(team)[0];
                 team.scores = team.scores.map((score: Score) => {
                     score.highlight = +score.points === maxScore;
                     return score;
@@ -123,15 +123,40 @@ export default function ScoreScreenPage() {
                 return team;
             })
             ?.sort((a: Team, b: Team) => {
-                const aMax = Math.max(...a.scores.map((score: Score) => +score.points));
-                const bMax = Math.max(...b.scores.map((score: Score) => +score.points));
+                const aScores = sortScores(a);
+                const bScores = sortScores(b);
 
-                return bMax - aMax;
-            })
-            .map((team: Team, index: number) => {
-                team.rank = index + 1;
-                return team;
+                for (let i = 0; i < aScores.length && i < bScores.length; i++) {
+                    if (aScores[i] !== bScores[i]) {
+                        return bScores[i] - aScores[i];
+                    }
+                }
+                return 0;
             });
+    teams = assignRanks(teams);
+
+    function assignRanks(teams: Team[]): Team[] {
+        if (teams.length === 0) {
+            return teams;
+        }
+
+        let rank = 1;
+        let prevScore = sortScores(teams[0])[0];
+        teams[0].rank = rank;
+        for (let i = 1; i < teams.length; i++) {
+            const maxScore = sortScores(teams[i])[0];
+            if (maxScore !== prevScore) {
+                rank = i + 1;
+            }
+            teams[i].rank = rank;
+            prevScore = maxScore;
+        }
+        return teams;
+    }
+
+    function sortScores(team: Team): number[] {
+        return team.scores.map((score: Score) => +score.points).sort((a, b) => b - a)
+    }
 
     // const teams = competition?.categories[0].teams;
 

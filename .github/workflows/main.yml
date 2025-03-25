@@ -32,7 +32,7 @@ jobs:
       - name: Clone Screen repository
         uses: actions/checkout@v4
         with:
-          name: Strohgelaender/screen
+          repository: Strohgelaender/screen
           path: /screen
       - name: Install Screen npm npm
         working-directory: /screen

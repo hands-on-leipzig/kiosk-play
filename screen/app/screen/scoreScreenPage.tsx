@@ -28,8 +28,7 @@ export default function ScoreScreenPage() {
     const [teamsPerPage, setTeamsPerPage] = useState(8);
     const [settings, setSettings] = useState<ScreenSettings | null>(null);
 
-    const TEST = 1620;
-    const FINAL = 1626;
+    const TOURNAMENT_ID = 1620;
 
     useEffect(() => {
         /*loadCompetition(id)
@@ -40,7 +39,7 @@ export default function ScoreScreenPage() {
             .catch((error) => setError(error.message)); */
 
         // Load DACH data
-        fetch(`https://kiosk.hands-on-technology.org/api/events/${TEST}/data/rg-scores`)
+        fetch(`https://kiosk.hands-on-technology.org/api/events/${TOURNAMENT_ID}/data/rg-scores`)
             .then((response) => response.json())
             .then((data) => {
                 setCompetition(new Competition(0, 1, data.name, [data]));
@@ -182,15 +181,15 @@ export default function ScoreScreenPage() {
                     <thead>
                         <tr>
                             <th className="px-4 py-2 border-b border-r border-white w-auto">Team</th>
-                            { round === 'VR' ?
+                            {round === 'VR' ? (
                                 <>
-                                <th className="px-4 py-2 border-r border-b border-white text-center w-40">R I</th>
-                                <th className="px-4 py-2 border-r border-b border-white text-center w-40">R II</th>
-                                <th className="px-4 py-2 border-r border-b border-white text-center w-40">R III</th>
+                                    <th className="px-4 py-2 border-r border-b border-white text-center w-40">R I</th>
+                                    <th className="px-4 py-2 border-r border-b border-white text-center w-40">R II</th>
+                                    <th className="px-4 py-2 border-r border-b border-white text-center w-40">R III</th>
                                 </>
-                            :
+                            ) : (
                                 <th className="px-4 py-2 border-r border-b border-white text-center w-60">Score</th>
-                            }
+                            )}
                             <th className="px-4 py-2 border-b border-white text-center w-40">Rank</th>
                         </tr>
                     </thead>

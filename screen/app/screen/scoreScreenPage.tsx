@@ -32,7 +32,7 @@ export default function ScoreScreenPage() {
             .catch((error) => setError(error.message)); */
 
         // Load DACH data
-        fetch('https://kiosk.hands-on-technology.org/api/events/1620/data/rg-scores')
+        fetch('/api/events/1620/data/rg-scores')
             .then((response) => response.json())
             .then((data) => {
                 setCompetition(new Competition(0, 1, 'DACH-Finale Siegen', [data]));
@@ -107,7 +107,6 @@ export default function ScoreScreenPage() {
 
     // @ts-expect-error - different data structure when using kiosk API
     const vr = competition?.categories[0]['rounds']['VR'];
-    console.log(vr);
     const teams =
         vr &&
         Object.keys(vr)
@@ -133,15 +132,14 @@ export default function ScoreScreenPage() {
                 team.rank = index + 1;
                 return team;
             });
-    console.log(teams);
 
     // const teams = competition?.categories[0].teams;
 
     return (
         <ScreenContainer settings={settings}>
-            <h1 className="text-white text-4xl font-bold bg-black/50 px-4 py-12 rounded-lg text-center">ROBOT-GAME SCORE: {competition?.name?.toUpperCase()}</h1>
+            <h1 className="text-white text-4xl font-bold px-4 py-12 rounded-lg text-center">ROBOT-GAME SCORE: {competition?.name?.toUpperCase()}</h1>
 
-            <div className="text-white text-5xl bg-black/50 rounded-lg p-20">
+            <div className="text-white text-5xl rounded-lg p-20">
                 {error && <div className="text-red-500">{error}</div>}
                 <table className="w-full border-collapse table-fixed text-left text-white ">
                     <thead>

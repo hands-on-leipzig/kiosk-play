@@ -35,7 +35,7 @@ jobs:
         working-directory: screen
         run: npm run build
       - name: Copy Screen result
-        run: cp -r /screen/out ./be/screen
+        run: cp -r screen/out ./be/screen
 
       - name: Deploy BE
         uses: sand4rt/ftp-deployer@v1.8

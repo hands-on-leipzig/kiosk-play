@@ -1,10 +1,12 @@
 <?php
+
 namespace model;
+
 use Dotenv\Dotenv;
 use mysqli;
 use mysqli_result;
 
-require_once 'vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 $dotenv = Dotenv::createImmutable(dirname(__DIR__, 1), "conf.env");
 $dotenv->load();
@@ -23,16 +25,15 @@ class MysqlDB
     protected $userName;
     protected $passCode;
 
-    function __construct()
+    function __construct($db = "kiosk")
     {
-        //$this->mysqli = mysqli::class;
         $this->query = "";
         $this->mysqli_result = mysqli_result::class;
 
-        $this->databaseName = $_ENV["DB_NAME"];
-        $this->hostName = $_ENV["DB_HOST"];
-        $this->userName = $_ENV["DB_USER"];
-        $this->passCode = $_ENV["DB_PW"];
+        $this->databaseName = $_ENV["DB_NAME_$db"];
+        $this->hostName = $_ENV["DB_HOST_$db"];
+        $this->userName = $_ENV["DB_USER_$db"];
+        $this->passCode = $_ENV["DB_PW_$db"];
     }
 
     function dbConnect()
@@ -43,15 +44,16 @@ class MysqlDB
         return $this->mysqli;
     }
 
-    function dbDisconnect()
+    function dbDisconnect(): void
     {
-        $this->mysqli = NULL;
-        $this->query = NULL;
-        $this->mysqli_result = NULL;
-        $this->databaseName = NULL;
-        $this->hostName = NULL;
-        $this->userName = NULL;
-        $this->passCode = NULL;
+        mysqli_close($this->mysqli);
+        unset($this->mysqli);
+        unset($this->query);
+        unset($this->mysqli_result);
+        unset($this->databaseName);
+        unset($this->hostName);
+        unset($this->userName);
+        unset($this->passCode);
     }
 
     public function now()
@@ -143,7 +145,7 @@ class MysqlDB
      *
      * @return string
      */
-    function insertInto(string $tableName, array $columns, array $values)
+    function insertInto(string $tableName, array $columns, array $values): int
     {
         $this->query = 'INSERT INTO ' . $tableName . ' (';
         foreach ($columns as $column) {

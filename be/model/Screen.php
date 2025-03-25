@@ -1,7 +1,7 @@
 <?php
 
 namespace model;
-require_once 'vendor/autoload.php';
+require_once '../vendor/autoload.php';
 class Screen extends BaseModel
 {
     public $table = "screen";
@@ -12,11 +12,14 @@ class Screen extends BaseModel
 
     public function register($event_id)
     {
-        $this->db->insertInto($this->table, ["event"], [$event_id]);
+        if (!isset($_POST["name"])) {
+            return "500";
+        }
+        return $this->db->insertInto($this->table, ["event", "name"], [$event_id, $_POST["name"]]);
     }
 
-    public function show_screens($event_id): array
+    public function show_screens($event_id): false|string
     {
-        return $this->db->selectAsObj($this->table, "event" ,"=", $event_id);
+        return json_encode($this->db->selectAsObj($this->table, "event" ,"=", $event_id));
     }
 }

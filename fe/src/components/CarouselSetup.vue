@@ -10,7 +10,7 @@ import {UrlSlideContent} from "../model/urlSlideContent.js";
 const KEYCLOAK_URL = "https://sso.hands-on-technology.org";
 const REALM = "master";
 const CLIENT_ID = "kiosk";
-const REDIRECT_URI = encodeURIComponent("https://" + document.location.href + "/auth");
+const REDIRECT_URI = encodeURIComponent(document.location.href + "/auth");
 
 const redirectToKeycloak = () => {
   window.location.href = `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/auth?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}`;

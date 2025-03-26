@@ -1,16 +1,12 @@
 <script setup>
 import '@splidejs/vue-splide/css';
-import {inject, onMounted, reactive, ref} from "vue";
+import {onMounted, reactive} from "vue";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
-import {UrlSlideContent} from "../model/urlSlideContent.js";
-import {ImageSlideContent} from "../model/imageSlideContent.js";
-import qrPlan from "../assets/imgSlides/qr-plan.png";
 import logo1_cut from "../assets/img/logo1_cut.png";
 import logo2_cut from "../assets/img/logo2_cut.png";
 import logo3_cut from "../assets/img/logo3_cut.png";
 import logo4 from "../assets/img/logo4.png";
 import api from "../services/api.js";
-import {Slide} from "../model/slide.js";
 
 
 /*const socket = inject('websocket');
@@ -78,10 +74,15 @@ async function fetchSettings() {
     console.log("Error fetching settings: ", error.message)
   }
 }
+
+function startFetchingSlides() {
+  setInterval(function () {
+    fetchSlides()
+  }, 5000)
+}
+
 onMounted(fetchSettings)
-onMounted(setInterval(function () {
-  fetchSlides()
-}, 5000))
+onMounted(startFetchingSlides)
 </script>
 
 <template>

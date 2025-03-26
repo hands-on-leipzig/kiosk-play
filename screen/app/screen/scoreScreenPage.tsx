@@ -11,8 +11,6 @@ import ScreenContainer from '../components/ScreenContainer';
 
 export default function ScoreScreenPage() {
     const searchParams = useSearchParams();
-    // const rawId = searchParams.get('id') ?? '353';
-    // const id = parseInt(rawId, 10);
 
     let round = searchParams.get('round')?.toUpperCase() ?? 'VR';
     if (!['VR', 'AF', 'VF'].includes(round)) {
@@ -31,13 +29,6 @@ export default function ScoreScreenPage() {
     const TOURNAMENT_ID = 1620;
 
     useEffect(() => {
-        /*loadCompetition(id)
-            .then((competition) => {
-                setCompetition(competition);
-                setTeamsPerPage(calculateTeamsPerPage(competition.categories[0]));
-            })
-            .catch((error) => setError(error.message)); */
-
         // Load DACH data
         fetch(`https://kiosk.hands-on-technology.org/api/events/${TOURNAMENT_ID}/data/rg-scores`)
             .then((response) => response.json())
@@ -45,15 +36,6 @@ export default function ScoreScreenPage() {
                 setCompetition(new Competition(0, 1, data.name, [data]));
             })
             .catch((error) => setError(error.message));
-
-        /*loadScreenSettings(id)
-            .then((settings) => {
-                setSettings(settings);
-                if (settings?.teamsPerPage) {
-                    setTeamsPerPage(settings.teamsPerPage);
-                }
-            })
-            .catch((error) => console.error('Error loading settings:', error));*/
         setSettings(dachScreenSettings);
         setTeamsPerPage(dachScreenSettings.teamsPerPage!);
     }, []);
@@ -127,6 +109,11 @@ export default function ScoreScreenPage() {
                     score.highlight = +score.points === maxScore && maxScore > 0 && scores.length > 1;
                     return score;
                 });
+
+                const expectedScores = round === 'VR' ? 3 : 1;
+                while (team.scores.length < expectedScores) {
+                    team.scores.push({ points: 0, highlight: false });
+                }
 
                 return team;
             })

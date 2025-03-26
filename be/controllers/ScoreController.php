@@ -80,9 +80,9 @@ class ScoreController
         $db->dbDisconnect();
 
         foreach ($results["rounds"]["VR"] as $t_id => $r) {
-            if (!isset($rounds_to_show["vr1"]) || !$rounds_to_show["vr1"]) unset($results["rounds"]["VR"][$t_id]["scores"][0]);
-            if (!isset($rounds_to_show["vr2"]) || !$rounds_to_show["vr2"]) unset($results["rounds"]["VR"][$t_id]["scores"][1]);
-            if (!isset($rounds_to_show["vr3"]) || !$rounds_to_show["vr3"]) unset($results["rounds"]["VR"][$t_id]["scores"][2]);
+            if (!$round_show_setting->vr1) $results["rounds"]["VR"][$t_id]["scores"][0]["points"] = 0;
+            if (!$round_show_setting->vr2) $results["rounds"]["VR"][$t_id]["scores"][1]["points"] = 0;
+            if (!$round_show_setting->vr3) $results["rounds"]["VR"][$t_id]["scores"][2]["points"] = 0;
         }
 
         return $results;

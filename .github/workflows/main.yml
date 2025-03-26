@@ -17,16 +17,16 @@ jobs:
         run: npm install
       - name: Build vue app
         run: npm run build
-#      - name: Deploy FE
-#        uses: sand4rt/ftp-deployer@v1.8
-#        with:
-#          sftp: true
-#          host: sftp.dedi137.your-server.de
-#          port: 22
-#          username: ${{ secrets.FTP_USER }}
-#          password: ${{ secrets.FTP_PASS }}
-#          remote_folder: /
-#          local_folder: dist
+      - name: Deploy FE
+        uses: sand4rt/ftp-deployer@v1.8
+        with:
+          sftp: true
+          host: sftp.dedi137.your-server.de
+          port: 22
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          remote_folder: /
+          local_folder: dist
 
       - name: Install screen npm
         working-directory: screen

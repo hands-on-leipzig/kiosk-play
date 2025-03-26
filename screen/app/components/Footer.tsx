@@ -1,4 +1,3 @@
-// src/main/webapp/app/components/Footer.tsx
 import React from 'react';
 import { ScreenSettings } from '../models/screenSettings';
 

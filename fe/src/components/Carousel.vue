@@ -5,6 +5,10 @@ import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 import {UrlSlideContent} from "../model/urlSlideContent.js";
 import {ImageSlideContent} from "../model/imageSlideContent.js";
 import qrPlan from "../assets/imgSlides/qr-plan.png";
+import logo1_cut from "../assets/img/logo1_cut.png";
+import logo2_cut from "../assets/img/logo2_cut.png";
+import logo3_cut from "../assets/img/logo3_cut.png";
+import logo4 from "../assets/img/logo4.png";
 
 
 /*const socket = inject('websocket');
@@ -67,7 +71,20 @@ let slides = ref([
       <SlideContentRenderer :slide="slide" class="slide"/>
     </SplideSlide>
   </Splide>
-  <footer>hier kommen noch Logos hin ...</footer>
+  <footer>
+    <div>
+      <img :src="logo1_cut">
+    </div>
+    <div>
+      <img :src="logo2_cut">
+    </div>
+    <div>
+      <img :src="logo3_cut">
+    </div>
+    <div>
+      <img :src="logo4">
+    </div>
+  </footer>
 </template>
 
 <style scoped>
@@ -78,6 +95,18 @@ footer {
   position: fixed;
   z-index: 10000;
   bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+footer div {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+footer img {
+  max-height: 9vh;
 }
 
 .slide {

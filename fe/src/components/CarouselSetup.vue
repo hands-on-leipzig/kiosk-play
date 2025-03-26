@@ -128,6 +128,7 @@ let slides = reactive([])
 async function fetchSlides() {
   const response = await api.get("/api/events/1/slides")
   if (response && response.data) {
+    slides = []
     for (let slide of response.data) {
       slides.push({
         id: slide.id,
@@ -135,7 +136,6 @@ async function fetchSlides() {
         content: JSON.parse(slide.content)
       })
     }
-    console.log(slides)
   }
 }
 

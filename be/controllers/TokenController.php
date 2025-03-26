@@ -6,7 +6,7 @@ class TokenController
 {
     public function getJWTToken($code)
     {
-        $dotenv = Dotenv::createImmutable(__DIR__, "conf.env");
+        $dotenv = Dotenv::createImmutable(__DIR__, "../conf.env");
         $dotenv->load();
 
         header("Access-Control-Allow-Origin: *");

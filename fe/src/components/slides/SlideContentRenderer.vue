@@ -6,6 +6,7 @@ import {ImageSlideContent} from "../../model/imageSlideContent.js";
 import {Slide} from "../../model/slide.js";
 import {RobotGameSlideContent} from "../../model/robotGameSlideContent.js";
 import {UrlSlideContent} from "../../model/urlSlideContent.js";
+import UrlSlideContentRenderer from "./UrlSlideContentRenderer.vue";
 
 const props = defineProps({
   slide: Slide
@@ -17,7 +18,7 @@ const componentName = computed(() => {
   } else if (props.slide.content instanceof RobotGameSlideContent) {
     return RobotGameSlideContentRenderer;
   }else if (props.slide.content instanceof UrlSlideContent) {
-    return UrlSlideContent;
+    return UrlSlideContentRenderer;
   }
   // TODO: Add renderers for other subtypes (RobotGameScore, FlowView, etc)
   return null;

@@ -14,7 +14,7 @@ const ScreenContainer: React.FC<ScreenContainerProps> = ({ children, style }) =>
         <div
             className="w-screen h-screen fldex flex-col items-center justify-start bg-cover bg-center"
             style={{
-                background: 'white',
+                background: 'black',
                 ...style,
             }}
         >

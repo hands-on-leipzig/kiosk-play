@@ -79,6 +79,26 @@ $h->get('/api/events/$event_id/screens', function ($event_id) {
     echo $screen->show_screens($event_id);
 });
 
+$h->post('/api/events/$event_id/settings', function ($event_id) {
+    $s = new controllers\SettingController($event_id);
+    try {
+        $s->saveSettings();
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+});
+
+$h->get('/api/events/$event_id/settings', function ($event_id) {
+    $s = new controllers\SettingController($event_id);
+    try {
+        $res = $s->getSettings();
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+    echo $res;
+});
 
 /*
 post('/api/events/$event_id/screens/$screen_id/slides', function($event_id, $screen_id) {

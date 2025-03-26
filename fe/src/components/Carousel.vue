@@ -3,6 +3,9 @@ import '@splidejs/vue-splide/css';
 import {inject, ref} from "vue";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 import {UrlSlideContent} from "../model/urlSlideContent.js";
+import {ImageSlideContent} from "../model/imageSlideContent.js";
+import qrPlan from "../assets/imgSlides/qr-plan.png";
+
 
 /*const socket = inject('websocket');
 socket.registerClient();
@@ -41,6 +44,11 @@ let slides = ref([
     title: "currently-running",
     content: new UrlSlideContent("https://flow.hands-on-technology.org/output/zeitplan.cgi?plan=160&role=14&brief=no&output=slide&hours=1&now=" + getFormattedDateTime()),
   },
+  {
+    id: 3,
+    title: "plan-qr",
+    content: new ImageSlideContent(qrPlan),
+  },
 ])
 </script>
 
@@ -48,7 +56,7 @@ let slides = ref([
   <Splide :options="{
     autoplay: true,
     rewind: true,
-    interval: 5000,
+    interval: 2000,
     type: 'fade',
     arrows: false,
     pauseOnHover: false,

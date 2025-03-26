@@ -2,9 +2,9 @@ import {SlideContent} from "./slideContent";
 
 export class ImageSlideContent extends SlideContent {
 
-    public imageUrl: string;
+    public imageUrl: {};
 
-    constructor(imageUrl: string,) {
+    constructor(imageUrl: {},) {
         super();
         this.imageUrl = imageUrl;
     }

@@ -14,8 +14,24 @@
   }
 }
 
+@font-face {
+  font-family: 'Uniform';
+  src: url("../../fe/src/assets/font/Uniform-Regular.otf") format('opentype');
+}
+
+@font-face {
+  font-family: 'Uniform';
+  src: url("../../fe/src/assets/font/Uniform-Bold.otf") format('opentype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Uniform Condensed';
+  src: url("../../fe/src/assets/font/UniformCondensed-Regular.otf") format('opentype');
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Uniform, Arial, Helvetica, sans-serif;
 }

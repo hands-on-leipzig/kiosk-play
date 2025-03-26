@@ -1,6 +1,4 @@
 <script setup>
-//import {UrlSlideContent} from "../../model/urlSlideContent.js";
-
 import {UrlSlideContent} from "../../model/urlSlideContent.js";
 
 const props = defineProps({
@@ -9,7 +7,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <object :data="slide.url"></object>
+    <object :data="props.slide.url"></object>
 </template>
 
 <style scoped>

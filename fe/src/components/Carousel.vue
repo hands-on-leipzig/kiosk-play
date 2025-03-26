@@ -39,16 +39,32 @@ function getFormattedDateTime() {
   return `${year}-${month}-${day}+${hours}:${minutes}`;
 }
 
-let slides = ref([
+/*let slides = ref([
     new Slide(1, "rg-scores", new UrlSlideContent("https://kiosk.hands-on-technology.org/screen.html")),
     new Slide(2, "currently-running", new UrlSlideContent("https://flow.hands-on-technology.org/output/zeitplan.cgi?plan=160&role=14&brief=no&output=slide&hours=1&now=" + getFormattedDateTime())),
     new Slide(3, "plan-qr", new ImageSlideContent(qrPlan)),
-])
+])*/
+
+let slides = reactive([])
 
 let settings = reactive({
   transitionTime: 15,
   transitionEffect: "fade",
 })
+
+async function fetchSlides() {
+  const response = await api.get("/api/events/1/slides")
+  if (response && response.data) {
+    slides = []
+    for (let slide of response.data) {
+      slides.push({
+        id: slide.id,
+        title: slide.title,
+        content: JSON.parse(slide.content)
+      })
+    }
+  }
+}
 
 async function fetchSettings() {
   try {
@@ -63,6 +79,9 @@ async function fetchSettings() {
   }
 }
 onMounted(fetchSettings)
+onMounted(setInterval(function () {
+  fetchSlides()
+}, 5000))
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup>
-import {Slide as slide, Slide} from "../model/slide.ts";
+import {Slide as Slide} from "../model/slide.ts";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 
 const props = defineProps({
@@ -7,8 +7,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['deleteSlide']);
-
-const componentSlide = slide.fromObject(props.slide)
+const componentSlide = Slide.fromObject(props.slide)
 </script>
 
 <template>

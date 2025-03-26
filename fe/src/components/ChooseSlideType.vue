@@ -34,6 +34,7 @@ async function pushSlide() {
   d.set("title", s.title)
   d.set("content", JSON.stringify(s.content.toJSON()))
   await api.post("/api/events/1/slides", d)
+  document.location.reload()
 }
 
 </script>

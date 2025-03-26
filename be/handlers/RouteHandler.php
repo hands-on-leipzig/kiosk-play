@@ -52,11 +52,13 @@ $h->get('/api/events/$event_id/settings', function ($event_id) {
 $h->get('/api/events/$event_id/slides', function ($event_id) {
     $s = new controllers\SlideController($event_id);
     try {
+
         $r = $s->fetchSlides();
     } catch (Exception $e) {
         http_response_code($e->getCode());
         exit($e->getMessage());
     }
+    header("Content-Type: application/json");
     echo $r;
 });
 

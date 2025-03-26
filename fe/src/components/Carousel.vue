@@ -7,6 +7,10 @@ import logo2_cut from "../assets/img/logo2_cut.png";
 import logo3_cut from "../assets/img/logo3_cut.png";
 import logo4 from "../assets/img/logo4.png";
 import api from "../services/api.js";
+import {Slide} from "../model/slide.js";
+import {ImageSlideContent} from "../model/imageSlideContent.js";
+import {RobotGameSlideContent} from "../model/robotGameSlideContent.js";
+import {UrlSlideContent} from "../model/urlSlideContent.js";
 
 
 /*const socket = inject('websocket');
@@ -41,24 +45,42 @@ function getFormattedDateTime() {
     new Slide(3, "plan-qr", new ImageSlideContent(qrPlan)),
 ])*/
 
-let slides = reactive([])
+let slides = ref([])
 
 let settings = reactive({
   transitionTime: 15,
   transitionEffect: "fade",
 })
 
+let loaded = ref(false)
+
+function getSlide(slide) {
+  let types = {
+    image: new ImageSlideContent("").toJSON().type,
+    rg: new RobotGameSlideContent().toJSON().type,
+    url: new UrlSlideContent("").toJSON().type
+  }
+
+  let content = JSON.parse(slide.content)
+  switch (content.type) {
+    case types.image:
+      return new Slide(slide.id, slide.title, new ImageSlideContent(content.url))
+    case types.rg:
+      return new Slide(slide.id, slide.title, new RobotGameSlideContent())
+    case types.url:
+      return new Slide(slide.id, slide.title, new UrlSlideContent(content.url))
+  }
+}
+
 async function fetchSlides() {
   const response = await api.get("/api/events/1/slides")
   if (response && response.data) {
     slides = []
     for (let slide of response.data) {
-      slides.push({
-        id: slide.id,
-        title: slide.title,
-        content: JSON.parse(slide.content)
-      })
+      slides.push(getSlide(slide))
     }
+    //splide.value.splide.refresh()
+    loaded.value = true
   }
 }
 
@@ -69,9 +91,6 @@ async function fetchSettings() {
       Object.keys(settings).forEach((key) => {
         settings[key] = response.data[key]
       })
-      if (splideInstance.value) {
-        splideInstance.value.splide.refresh();
-      }
     }
   } catch (error) {
     console.log("Error fetching settings: ", error.message)
@@ -84,19 +103,20 @@ function startFetchingSlides() {
   }, 5000)
 }
 
-let splideInstance = ref(null);
-
 onMounted(fetchSettings)
 onMounted(startFetchingSlides)
+onMounted(fetchSlides)
+
+let splide = ref()
+
 </script>
 
 <template>
-  <Splide :options="{
-    ref: splideInstance,
+  <Splide v-if="loaded === true" :options="{
     autoplay: true,
     rewind: true,
-    interval: settings.transitionTime * 1000,
-    type: settings.transitionEffect,
+    interval: 2000,
+    type: 'fade',
     arrows: false,
     pauseOnHover: false,
     pauseOnFocus: false,

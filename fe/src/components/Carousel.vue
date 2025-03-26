@@ -10,6 +10,7 @@ import logo2_cut from "../assets/img/logo2_cut.png";
 import logo3_cut from "../assets/img/logo3_cut.png";
 import logo4 from "../assets/img/logo4.png";
 import api from "../services/api.js";
+import {Slide} from "../model/slide.js";
 
 
 /*const socket = inject('websocket');
@@ -39,27 +40,16 @@ function getFormattedDateTime() {
 }
 
 let slides = ref([
-  {
-    id: 1,
-    title: "rg-scores",
-    content: new UrlSlideContent("https://kiosk.hands-on-technology.org/screen.html"),
-  },
-  {
-    id: 2,
-    title: "currently-running",
-    content: new UrlSlideContent("https://flow.hands-on-technology.org/output/zeitplan.cgi?plan=160&role=14&brief=no&output=slide&hours=1&now=" + getFormattedDateTime()),
-  },
-  {
-    id: 3,
-    title: "plan-qr",
-    content: new ImageSlideContent(qrPlan),
-  },
+    new Slide(1, "rg-scores", new UrlSlideContent("https://kiosk.hands-on-technology.org/screen.html")),
+    new Slide(2, "currently-running", new UrlSlideContent("https://flow.hands-on-technology.org/output/zeitplan.cgi?plan=160&role=14&brief=no&output=slide&hours=1&now=" + getFormattedDateTime())),
+    new Slide(3, "plan-qr", new ImageSlideContent(qrPlan)),
 ])
-console.log(slides)
+
 let settings = reactive({
   transitionTime: 15,
   transitionEffect: "fade",
 })
+
 async function fetchSettings() {
   try {
     const response = await api.get("/api/events/1/settings")
@@ -72,7 +62,7 @@ async function fetchSettings() {
     console.log("Error fetching settings: ", error.message)
   }
 }
-onMounted(fetchSettings())
+onMounted(fetchSettings)
 </script>
 
 <template>

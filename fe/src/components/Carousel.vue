@@ -16,6 +16,8 @@ let slides = ref(socket.slides);*/
 function getFormattedDateTime() {
   const now = new Date();
 
+  now.setDate(29)
+
   // Get date components
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based

@@ -1,4 +1,4 @@
-import {Slide} from "../../model/slide.js";
+/*import {Slide} from "../../model/slide.js";
 import {ImageSlideContent} from "../../model/imageSlideContent.js";
 import {ref, watch} from "vue";
 import type {Ref} from "vue";
@@ -56,3 +56,4 @@ function handleEvent(event) {
         break;
   }
 }
+*/

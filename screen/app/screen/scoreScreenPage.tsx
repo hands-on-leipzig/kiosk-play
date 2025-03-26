@@ -158,7 +158,7 @@ export default function ScoreScreenPage() {
     // const teams = competition?.categories[0].teams;
 
     return (
-        <ScreenContainer settings={settings} style={{position: 'absolute', top: 0}}>
+        <ScreenContainer settings={settings} style={{ position: 'absolute', top: 0 }}>
             <h1 className="text-gray text-4xl font-bold px-4 py-12 rounded-lg text-center">ROBOT-GAME SCORE: {competition?.name?.toUpperCase()}</h1>
 
             <div className="text-gray text-5xl rounded-lg p-20">

@@ -1,6 +1,6 @@
 <script setup>
 import '@splidejs/vue-splide/css';
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 import logo1_cut from "../assets/img/logo1_cut.png";
 import logo2_cut from "../assets/img/logo2_cut.png";
@@ -69,6 +69,9 @@ async function fetchSettings() {
       Object.keys(settings).forEach((key) => {
         settings[key] = response.data[key]
       })
+      if (splideInstance.value) {
+        splideInstance.value.splide.refresh();
+      }
     }
   } catch (error) {
     console.log("Error fetching settings: ", error.message)
@@ -81,12 +84,15 @@ function startFetchingSlides() {
   }, 5000)
 }
 
+let splideInstance = ref(null);
+
 onMounted(fetchSettings)
 onMounted(startFetchingSlides)
 </script>
 
 <template>
   <Splide :options="{
+    ref: splideInstance,
     autoplay: true,
     rewind: true,
     interval: settings.transitionTime * 1000,
@@ -94,7 +100,7 @@ onMounted(startFetchingSlides)
     arrows: false,
     pauseOnHover: false,
     pauseOnFocus: false,
-    pagination: false,
+    pagination: false
   }" aria-label="My Favorite Images">
     <SplideSlide v-for="slide in slides" :key="slide.id">
       <SlideContentRenderer :slide="slide" class="slide"/>
@@ -102,16 +108,16 @@ onMounted(startFetchingSlides)
   </Splide>
   <footer>
     <div>
-      <img :src="logo1_cut">
+      <img :src="logo1_cut" alt="logo">
     </div>
     <div>
-      <img :src="logo2_cut">
+      <img :src="logo2_cut" alt="logo">
     </div>
     <div>
-      <img :src="logo3_cut">
+      <img :src="logo3_cut" alt="logo">
     </div>
     <div>
-      <img :src="logo4">
+      <img :src="logo4" alt="logo">
     </div>
   </footer>
 </template>

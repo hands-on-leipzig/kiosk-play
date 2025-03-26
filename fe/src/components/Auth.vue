@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted } from "vue";
+import {onMounted} from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
+import {useRouter} from "vue-router";
 
 const router = useRouter();
 
@@ -11,7 +11,10 @@ onMounted(async () => {
 
   if (code) {
     try {
-      const response = await axios.post("/api/auth", { code });
+      let formData = new FormData()
+      formData.set("code", code)
+      const response = await axios.post("/api/auth", formData);
+      console.log(response)
       localStorage.setItem("jwt_token", response.data.jwt_token);
       await router.push("/setup"); // Redirect to dashboard
     } catch (error) {
@@ -22,7 +25,7 @@ onMounted(async () => {
 </script>
 
 <template>
-Authenticate ...
+  Authenticate ...
 </template>
 
 <style scoped>

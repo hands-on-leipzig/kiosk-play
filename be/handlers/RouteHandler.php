@@ -20,8 +20,7 @@ header("Access-Control-Allow-Origin: *");
 // open endpoints
 $h->post('/api/auth', function () {
     $t = new controllers\TokenController();
-    $data = $_POST["code"];
-    echo $t->getJWTToken($data);
+    echo $t->getJWTToken($_POST["code"]);
 });
 
 $h->get('/api/events/$event_id/data/rg-scores', function ($event_id) {

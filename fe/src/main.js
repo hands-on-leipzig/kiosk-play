@@ -12,12 +12,10 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {faEarth, faImage, faPlusCircle, faTrashCan} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
-
-
 library.add(faPlusCircle, faTrashCan, faImage, faEarth);
 
 const routes = [
-    {path: '/', component: CarouselSetup},
+    {path: '/setup', component: CarouselSetup},
     {path: '/carousel', component: Carousel},
     {path: '/auth', component: Auth},
 ]

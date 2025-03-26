@@ -6,15 +6,14 @@ class TokenController
 {
     public function getJWTToken($code)
     {
-        return $code;
         $dotenv = Dotenv::createImmutable(__DIR__);
         $dotenv->load();
 
         header("Access-Control-Allow-Origin: *");
         header("Content-Type: application/json");
 
-        $data = json_decode(file_get_contents("php://input"), true);
-        $code = $data['code'];
+        //$data = json_decode(file_get_contents("php://input"), true);
+        //$code = $data['code'];
 
         /*$fields = [
             "grant_type" => "authorization_code",

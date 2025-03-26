@@ -12,9 +12,10 @@ class SlideController extends Controller
             $slide[$param] = $value;
         }
         $screen = 1;
+        $jsoncontent = json_encode($slide["content"]);
 
-        mysqli_stmt_prepare($this->db->stmt, "INSERT INTO slides (screen, title, content) VALUES (?,?,?)");
-        mysqli_stmt_bind_param($this->db->stmt, "iss", $screen, $slide["title"], $slide["content"]);
+        mysqli_stmt_prepare($this->db->stmt, "INSERT INTO slides (screen, title, content) VALUES (?, ?, ?)");
+        mysqli_stmt_bind_param($this->db->stmt, "iss", $screen, $slide["title"], $jsoncontent);
         try {
             mysqli_stmt_execute($this->db->stmt);
         } catch (\Exception $e) {
@@ -25,6 +26,6 @@ class SlideController extends Controller
 
     public function fetchSlides(): string
     {
-        return json_encode($this->db->select("SELECT * FROM slides WHERE id = " . $this->event_id));
+        return json_encode($this->db->select("SELECT * FROM slides JOIN screen ON slides.screen = screen.id WHERE screen.event = " . $this->event_id));
     }
 }

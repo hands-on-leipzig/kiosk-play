@@ -51,7 +51,6 @@ checkAuth();
 
 //const socket = inject('websocket');
 //const slides = socket.slides;
-let slides
 
 function addSlide() {
 
@@ -124,20 +123,23 @@ async function fetchSettings() {
   }
 }
 
-let content = new UrlSlideContent("")
-let slide = new Slide(1, "title", content.toJSON())
+let content = new UrlSlideContent("https://kiosk.hands-on-technology.org/screen.html")
+let s = new Slide(1, "title", content)
 
 async function pushSlide() {
   let d = new FormData
-  d.set("title", slide.title)
-  d.set("content", JSON.stringify(slide.content))
+  d.set("title", s.title)
+  d.set("content", JSON.stringify(s.content.toJSON()))
   await api.post("/api/events/1/slides", d)
 }
 
+let slides = reactive([])
 async function fetchSlides() {
   const response = await api.get("/api/events/1/slides")
   if (response && response.data) {
-    console.log(response.data)
+    for (let slide of response.data) {
+      slides.push(slide)
+    }
   }
 }
 

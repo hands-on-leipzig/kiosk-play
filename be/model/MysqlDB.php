@@ -138,6 +138,13 @@ class MysqlDB
         return $result;
     }
 
+    public function select($q) {
+        $this->execute($q);
+        for ($i = 0; $i < $this->mysqli_result->num_rows; $i++) {
+            $result[] = mysqli_fetch_object($this->mysqli_result);
+        }
+        return $result;
+    }
     /**
      * Insert values into DB
      *

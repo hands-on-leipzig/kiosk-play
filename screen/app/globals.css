@@ -36,3 +36,7 @@ body {
   font-family: Uniform, Arial, Helvetica, sans-serif;
   padding: 10vw 0;
 }
+
+html, body {
+  overflow: hidden;
+}

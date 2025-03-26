@@ -15,11 +15,33 @@ const redirectToKeycloak = () => {
   window.location.href = `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/auth?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}`;
 };
 
+function isValidJwt(token) {
+  if (!token) return false;
+
+  try {
+    // Split the token into parts
+    const payloadBase64 = token.split('.')[1];
+    if (!payloadBase64) return false;
+
+    // Decode the payload
+    const payload = JSON.parse(atob(payloadBase64));
+
+    // Check for expiration timestamp (exp)
+    const expiration = payload.exp * 1000; // Convert to milliseconds
+    const now = Date.now();
+
+    return expiration > now;
+  } catch (e) {
+    console.error("Invalid JWT token:", e.message);
+    return false;
+  }
+}
+
 // Check if user is logged in
 const checkAuth = () => {
   const token = localStorage.getItem("jwt_token");
-  if (!token || token === "") {
-    redirectToKeycloak();
+  if (!token || !isValidJwt(token)) {
+    //  redirectToKeycloak();
   }
 };
 
@@ -34,9 +56,6 @@ function addSlide() {
   const randomName = ref(faker.person.fullName());
   slides.value.push(new Slide(slides.value.length + 1, randomName));
 }
-
-const transitionTime = ref(15); // Default transition time in ms
-const transitionEffect = ref("ease-in-out"); // Default transition effect
 
 function updateOrder() {
   console.log("Updated order:", slides); // Logs new order for debugging
@@ -56,36 +75,55 @@ const showRound = reactive({
   hf: false,
 });
 
-async function handleSave() {
+async function saveRoundDisplaySetting() {
   let d = new FormData
-  d.set("vr1", showRound.vr1)
-  d.set("vr2", showRound.vr2)
-  d.set("vr3", showRound.vr3)
-  d.set("af", showRound.af)
-  d.set("vf", showRound.vf)
-  d.set("hf", showRound.hf)
+  Object.keys(showRound).forEach((key) => {
+    d.set(key, showRound[key])
+  })
   await api.post("/api/events/1/scores/show-rounds", d)
 }
 
 async function fetchRounds() {
   try {
-    const response = await api.get("/api/events/1/scores/show-rounds");
+    const response = await api.get("/api/events/1/scores/show-rounds")
     if (response && response.data) {
-      const data = response.data;
-      showRound.vr1 = data.vr1 || false;
-      showRound.vr2 = data.vr2 || false;
-      showRound.vr3 = data.vr3 || false;
-      showRound.af = data.af || false;
-      showRound.vf = data.vf || false;
-      showRound.hf = data.hf || false;
+      Object.keys(showRound).forEach((key) => {
+        showRound[key] = response.data[key] || false
+      })
     }
   } catch (error) {
     console.error("Error fetching rounds:", error.message);
   }
 }
 
-onMounted(fetchRounds())
+let settings = reactive({
+  transitionTime: 15,
+  transitionEffect: "fade",
+})
 
+async function saveSettings() {
+  let d = new FormData
+  Object.keys(settings).forEach((key) => {
+    d.set(key, settings[key])
+  })
+  await api.post("/api/events/1/settings")
+}
+
+async function fetchSettings() {
+  try {
+    const response = await api.get("/api/events/1/settings")
+    if (response && response.data) {
+      Object.keys(settings).forEach((key) => {
+        settings[key] = response.data[key]
+      })
+    }
+  } catch (error) {
+    console.log("Error fetching settings: ", error.message)
+  }
+}
+
+onMounted(fetchRounds())
+onMounted(fetchSettings())
 </script>
 
 <template>
@@ -93,7 +131,7 @@ onMounted(fetchRounds())
 
   <div class="controls">
     <div class="show-round">
-      <form @submit.prevent="handleSave">
+      <form @submit.prevent="saveRoundDisplaySetting">
         <label>VR I
           <input v-model="showRound.vr1" name="vr1" type="checkbox">
         </label>
@@ -116,18 +154,22 @@ onMounted(fetchRounds())
       </form>
     </div>
 
-    <label>Transition Time (sec):
-      <input v-model="transitionTime" max="60" min="2" type="range">
-      <span>{{ transitionTime }}ms</span>
-    </label>
+    <div>
+      <form @change="saveSettings">
+        <label>Transition Time (sec):
+          <input v-model="settings.transitionTime" max="60" min="2" type="range">
+          <span>{{ settings.transitionTime }}ms</span>
+        </label>
 
-    <label>Transition Effect:
-      <select v-model="transitionEffect">
-        <option selected value="fade">Fade</option>
-        <option value="slide">Slide</option>
-        <option value="loop">Loop</option>
-      </select>
-    </label>
+        <label>Transition Effect:
+          <select v-model="settings.transitionEffect">
+            <option selected value="fade">Fade</option>
+            <option value="slide">Slide</option>
+            <option value="loop">Loop</option>
+          </select>
+        </label>
+      </form>
+    </div>
   </div>
 
 

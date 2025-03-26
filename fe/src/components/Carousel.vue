@@ -1,6 +1,6 @@
 <script setup>
 import '@splidejs/vue-splide/css';
-import {inject, ref} from "vue";
+import {inject, onMounted, reactive, ref} from "vue";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 import {UrlSlideContent} from "../model/urlSlideContent.js";
 import {ImageSlideContent} from "../model/imageSlideContent.js";
@@ -9,6 +9,7 @@ import logo1_cut from "../assets/img/logo1_cut.png";
 import logo2_cut from "../assets/img/logo2_cut.png";
 import logo3_cut from "../assets/img/logo3_cut.png";
 import logo4 from "../assets/img/logo4.png";
+import api from "../services/api.js";
 
 
 /*const socket = inject('websocket');
@@ -54,14 +55,32 @@ let slides = ref([
     content: new ImageSlideContent(qrPlan),
   },
 ])
+
+let settings = reactive({
+  transitionTime: 15,
+  transitionEffect: "fade",
+})
+async function fetchSettings() {
+  try {
+    const response = await api.get("/api/events/1/settings")
+    if (response && response.data) {
+      Object.keys(settings).forEach((key) => {
+        settings[key] = response.data[key]
+      })
+    }
+  } catch (error) {
+    console.log("Error fetching settings: ", error.message)
+  }
+}
+onMounted(fetchSettings())
 </script>
 
 <template>
   <Splide :options="{
     autoplay: true,
     rewind: true,
-    interval: 2000,
-    type: 'fade',
+    interval: settings.transitionTime,
+    type: settings.transitionEffect,
     arrows: false,
     pauseOnHover: false,
     pauseOnFocus: false,

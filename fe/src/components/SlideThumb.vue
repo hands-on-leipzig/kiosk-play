@@ -3,12 +3,12 @@ import {Slide as slide, Slide} from "../model/slide.ts";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 
 const props = defineProps({
-  slideObj: Slide
+  slide: Slide
 });
 
 const emit = defineEmits(['deleteSlide']);
 
-const componentSlide = slide.fromObject(props.slideObj)
+const componentSlide = slide.fromObject(props.slide)
 </script>
 
 <template>
@@ -17,8 +17,8 @@ const componentSlide = slide.fromObject(props.slideObj)
     <div class="thumb">
       <SlideContentRenderer :slide="componentSlide"></SlideContentRenderer>
     </div>
-    <span>{{ props.slideObj.content.type }}</span>
-    <span>{{ props.slideObj.title }}</span>
+    <span>{{ slide.content.type}}</span>
+    <span>{{ slide.title }}</span>
   </div>
 </template>
 

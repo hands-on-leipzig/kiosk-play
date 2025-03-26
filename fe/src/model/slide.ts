@@ -39,7 +39,7 @@ export class Slide {
         });
     }
 
-    public static fromObject(obj: InferPropType<Slide>): Slide {
+    public static fromObject(obj: Slide): Slide {
         let content: SlideContent;
 
         // @ts-ignore

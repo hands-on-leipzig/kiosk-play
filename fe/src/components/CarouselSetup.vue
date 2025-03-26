@@ -1,11 +1,11 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
 import SlideThumb from "./SlideThumb.vue";
-import {faker} from '@faker-js/faker';
 import draggable from "vuedraggable";
 import {Slide} from "../model/slide.ts";
 import api from '../services/api';
 import {UrlSlideContent} from "../model/urlSlideContent.js";
+import ChooseSlideType from "./ChooseSlideType.vue";
 
 const KEYCLOAK_URL = "https://sso.hands-on-technology.org";
 const REALM = "master";
@@ -15,6 +15,8 @@ const REDIRECT_URI = encodeURIComponent("https://kiosk.hands-on-technology.org/a
 const redirectToKeycloak = () => {
   window.location.href = `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/auth?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}`;
 };
+
+let newSlide = ref(false)
 
 function isValidJwt(token) {
   if (!token) return false;
@@ -53,9 +55,7 @@ checkAuth();
 //const slides = socket.slides;
 
 function addSlide() {
-
-  const randomName = ref(faker.person.fullName());
-  slides.value.push(new Slide(slides.value.length + 1, randomName));
+  slides.push(new Slide(slides.length + 1, "randomName", new UrlSlideContent("url")));
 }
 
 function updateOrder() {
@@ -123,17 +123,8 @@ async function fetchSettings() {
   }
 }
 
-let content = new UrlSlideContent("https://kiosk.hands-on-technology.org/screen.html")
-let s = new Slide(1, "title", content)
-
-async function pushSlide() {
-  let d = new FormData
-  d.set("title", s.title)
-  d.set("content", JSON.stringify(s.content.toJSON()))
-  await api.post("/api/events/1/slides", d)
-}
-
 let slides = reactive([])
+
 async function fetchSlides() {
   const response = await api.get("/api/events/1/slides")
   if (response && response.data) {
@@ -148,14 +139,17 @@ async function fetchSlides() {
   }
 }
 
-onMounted(fetchSlides())
-onMounted(fetchRounds())
-onMounted(fetchSettings())
+function chooseNewSlide() {
+  newSlide.value = true
+}
+
+onMounted(fetchSlides)
+onMounted(fetchRounds)
+onMounted(fetchSettings)
 </script>
 
 <template>
   <h1>Kiosk Carousel</h1>
-  <button @click="pushSlide">push slide</button>
   <div class="controls">
     <div class="show-round">
       <form @submit.prevent="saveRoundDisplaySetting">
@@ -207,7 +201,7 @@ onMounted(fetchSettings())
 
 
   <div class="slides-container">
-    <div class="add-slide" @click="addSlide">
+    <div class="add-slide" @click="chooseNewSlide">
       <fa :icon="['fas', 'plus-circle']"></fa>
     </div>
     <draggable v-model="slides" class="draggable-list" ghost-class="ghost" group="slides" item-key="id"
@@ -217,6 +211,7 @@ onMounted(fetchSettings())
       </template>
     </draggable>
   </div>
+  <ChooseSlideType v-if="newSlide"/>
 </template>
 
 <style scoped>

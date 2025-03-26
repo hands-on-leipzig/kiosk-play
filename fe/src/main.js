@@ -12,24 +12,7 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {faEarth, faImage, faPlusCircle, faTrashCan} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
-const KEYCLOAK_URL = "https://sso.hands-on-technology.org";
-const REALM = "master";
-const CLIENT_ID = "kiosk";
-const REDIRECT_URI = encodeURIComponent("https://kiosk.hands-on-technology.org/auth");
 
-const redirectToKeycloak = () => {
-    window.location.href = `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/auth?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}`;
-};
-
-// Check if user is logged in
-const checkAuth = () => {
-    const token = localStorage.getItem("jwt_token");
-    if (!token) {
-        //redirectToKeycloak();
-    }
-};
-
-checkAuth();
 
 library.add(faPlusCircle, faTrashCan, faImage, faEarth);
 

@@ -52,6 +52,11 @@ $h->post('/api/events/$event_id/screens/register', function ($event_id) {
     echo $screen->register($event_id);
 });
 
+$h->post('/api/events/$event_id/scores/set-rounds', function ($event_id) {
+    global $db;
+    echo "gesetzte";
+});
+
 $h->get('/api/events/$event_id/screens', function ($event_id) {
     global $db;
     $screen = new Screen($db);

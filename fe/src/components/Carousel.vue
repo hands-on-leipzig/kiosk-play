@@ -53,6 +53,7 @@ let slides = ref([
 </script>
 
 <template>
+  <div class="logo-left"></div>
   <Splide :options="{
     autoplay: true,
     rewind: true,
@@ -66,8 +67,25 @@ let slides = ref([
       <SlideContentRenderer :slide="slide"/>
     </SplideSlide>
   </Splide>
+  <div class="logo-right"></div>
 </template>
 
 <style scoped>
+.logo-left, .logo-right {
+  background-color: white;
+  width: 10vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 10000;
+  top: 0;
+}
+
+.logo-left {
+  left: 0;
+}
+
+.logo-right {
+  right: 0;
+}
 
 </style>

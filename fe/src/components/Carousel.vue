@@ -53,7 +53,6 @@ let slides = ref([
 </script>
 
 <template>
-  <div class="logo-left"></div>
   <Splide :options="{
     autoplay: true,
     rewind: true,
@@ -64,28 +63,27 @@ let slides = ref([
     pauseOnFocus: false,
   }" aria-label="My Favorite Images">
     <SplideSlide v-for="slide in slides" :key="slide.id">
-      <SlideContentRenderer :slide="slide"/>
+      <SlideContentRenderer :slide="slide" class="slide"/>
     </SplideSlide>
   </Splide>
-  <div class="logo-right"></div>
+  <footer></footer>
 </template>
 
 <style scoped>
-.logo-left, .logo-right {
+footer {
   background-color: white;
-  width: 10vw;
-  height: 100vh;
+  width: 100vw;
+  height: 10vh;
   position: fixed;
   z-index: 10000;
-  top: 0;
+  bottom: 0;
 }
 
-.logo-left {
-  left: 0;
+.slide {
+  width: 100vw;
+  height: 90vh;
+  position: relative;
+  margin: 0;
+  padding: 0;
 }
-
-.logo-right {
-  right: 0;
-}
-
 </style>

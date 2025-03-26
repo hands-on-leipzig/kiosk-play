@@ -5,7 +5,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { Competition } from '../models/competition';
 import { Score } from '../models/score';
 import { Team } from '../models/team';
-import Footer from '../components/Footer';
 import { dachScreenSettings, ScreenSettings } from '../models/screenSettings';
 import ScreenContainer from '../components/ScreenContainer';
 
@@ -191,7 +190,6 @@ export default function ScoreScreenPage() {
                     </tbody>
                 </table>
             </div>
-            <Footer settings={settings} />
         </ScreenContainer>
     );
 }

@@ -15,6 +15,7 @@ class MysqlDB
 {
 
     public mysqli $mysqli;
+    public \mysqli_stmt $stmt;
     public $mysqli_result;
     public $query;
     public $error;
@@ -41,6 +42,7 @@ class MysqlDB
         $this->mysqli = mysqli_connect($this->hostName, $this->userName, $this->passCode);
         mysqli_select_db($this->mysqli, $this->databaseName);
         mysqli_set_charset($this->mysqli, "utf8mb4");
+        $this->stmt = mysqli_stmt_init($this->mysqli);
         return $this->mysqli;
     }
 

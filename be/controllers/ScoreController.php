@@ -16,6 +16,9 @@ class ScoreController
      */
     public function getScores($event_id): array
     {
+        $rounds_to_show = $this->getRoundsToShow($event_id);
+        var_dump($rounds_to_show);
+
         $db = new MysqlDB("contao");
         $db->dbConnect();
 
@@ -23,7 +26,7 @@ class ScoreController
         $q .= " WHERE t.region=$event_id";
         $result = $db->execute($q);
         if ($db->num_rows == 0) {
-            throw new \Exception("No event found for id " . $event_id, 404);
+            throw new \Exception("No event found for id " . $this->getTournamentId($event_id), 404);
         }
 
         $data = mysqli_fetch_object($result);
@@ -72,5 +75,67 @@ class ScoreController
         $db->dbDisconnect();
 
         return $results;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function setRoundsToShow($event_id): null
+    {
+        $rounds = json_encode(array(
+            "vr1" => $_POST["vr1"] == "true",
+            "vr2" => $_POST["vr2"] == "true",
+            "vr3" => $_POST["vr3"] == "true",
+            "af" => $_POST["af"] == "true",
+            "vf" => $_POST["vf"] == "true",
+            "hf" => $_POST["hf"] == "true",
+        ));
+
+        $db = new MysqlDB();
+        $db->dbConnect();
+        mysqli_stmt_prepare($db->stmt,"UPDATE event SET rg_score_show = ? WHERE id = ?" );
+        mysqli_stmt_bind_param($db->stmt, "ss", $rounds, $event_id);
+        try {
+            mysqli_stmt_execute($db->stmt);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        $db->dbDisconnect();
+        return null;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getRoundsToShow($event_id): string
+    {
+        $db = new MysqlDB();
+        $db->dbConnect();
+
+        try {
+            $o = $db->selectAsObj("event", "id", "=", $event_id);
+            var_dump($event_id);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        $db->dbDisconnect();
+        return $o[0]->rg_score_show;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getTournamentId($event_id): string
+    {
+        $db = new MysqlDB();
+        $db->dbConnect();
+
+        try {
+            $o = $db->selectAsObj("event", "id", "=", $event_id);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        $db->dbDisconnect();
+        return $o[0]->tournament;
     }
 }

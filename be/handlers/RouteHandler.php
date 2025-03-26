@@ -52,9 +52,25 @@ $h->post('/api/events/$event_id/screens/register', function ($event_id) {
     echo $screen->register($event_id);
 });
 
-$h->post('/api/events/$event_id/scores/set-rounds', function ($event_id) {
-    global $db;
-    echo "gesetzte";
+$h->post('/api/events/$event_id/scores/show-rounds', function ($event_id) {
+    $s = new controllers\ScoreController();
+    try {
+        $s->setRoundsToShow($event_id);
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+});
+
+$h->get('/api/events/$event_id/scores/show-rounds', function ($event_id) {
+    $s = new controllers\ScoreController();
+    try {
+        $res = $s->getRoundsToShow($event_id);
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+    echo $res;
 });
 
 $h->get('/api/events/$event_id/screens', function ($event_id) {

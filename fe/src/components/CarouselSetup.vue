@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import SlideThumb from "./SlideThumb.vue";
 import {faker} from '@faker-js/faker';
 import draggable from "vuedraggable";
@@ -57,9 +57,35 @@ const showRound = reactive({
 });
 
 async function handleSave() {
-  let response = await api.post("/api/scores/set-rounds", JSON.stringify(showRound))
-  console.log(response.data)
+  let d = new FormData
+  d.set("vr1", showRound.vr1)
+  d.set("vr2", showRound.vr2)
+  d.set("vr3", showRound.vr3)
+  d.set("af", showRound.af)
+  d.set("vf", showRound.vf)
+  d.set("hf", showRound.hf)
+  await api.post("/api/events/1/scores/show-rounds", d)
 }
+
+async function fetchRounds() {
+  try {
+    const response = await api.get("/api/events/1/scores/show-rounds");
+    if (response && response.data) {
+      const data = response.data;
+      showRound.vr1 = data.vr1 || false;
+      showRound.vr2 = data.vr2 || false;
+      showRound.vr3 = data.vr3 || false;
+      showRound.af = data.af || false;
+      showRound.vf = data.vf || false;
+      showRound.hf = data.hf || false;
+    }
+  } catch (error) {
+    console.error("Error fetching rounds:", error.message);
+  }
+}
+
+onMounted(fetchRounds())
+
 </script>
 
 <template>

@@ -26,7 +26,7 @@ export default function ScoreScreenPage() {
     const [teamsPerPage, setTeamsPerPage] = useState(8);
     const [settings, setSettings] = useState<ScreenSettings | null>(null);
 
-    const TOURNAMENT_ID = 1620;
+    const TOURNAMENT_ID = 1;
 
     useEffect(() => {
         // Load DACH data

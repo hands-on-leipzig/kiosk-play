@@ -2,6 +2,9 @@
 namespace controllers;
 
 use Dotenv\Dotenv;
+
+use Firebase\JWT\JWT;
+
 class TokenController
 {
     public function getJWTToken($code)
@@ -42,10 +45,17 @@ class TokenController
             "username" => $keycloak_response["preferred_username"],
             "exp" => time() + 3600 // Token expires in 1 hour
         ];*/
-        $jwt_payload = [];
+        $jwt_payload = [
+            "iss" => "your-issuer",        // Issuer (who issued the token)
+            "aud" => "your-audience",      // Audience (who the token is intended for)
+            "iat" => time(),               // Issued At (current time)
+            "exp" => time() + 3600,        // Expiration Time (1 hour from now)
+            "data" => [                    // Custom Payload Data
+                "user_id" => 123,
+                "username" => "john_doe"
+            ]
+        ];
 
-        $jwt_token = base64_encode(json_encode($jwt_payload)) . "." . base64_encode(hash_hmac("sha256", json_encode($jwt_payload), $_ENV["JWT_SECRET"], true));
-
-        return $jwt_token;
+        return JWT::encode($jwt_payload, $_ENV["JWT_SECRET"], 'HS256');
     }
 }

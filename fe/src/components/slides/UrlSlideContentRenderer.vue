@@ -2,14 +2,19 @@
 import {UrlSlideContent} from "../../model/urlSlideContent.js";
 
 const props = defineProps({
-  slide: UrlSlideContent,
+  content: UrlSlideContent,
 });
+
 </script>
 
 <template>
-    <object :data="props.slide.url"></object>
+    <object :data="props.content.url"></object>
 </template>
 
 <style scoped>
-
+object {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+}
 </style>

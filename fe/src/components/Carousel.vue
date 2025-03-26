@@ -55,7 +55,7 @@ let slides = ref([
     content: new ImageSlideContent(qrPlan),
   },
 ])
-
+console.log(slides)
 let settings = reactive({
   transitionTime: 15,
   transitionEffect: "fade",
@@ -79,7 +79,7 @@ onMounted(fetchSettings())
   <Splide :options="{
     autoplay: true,
     rewind: true,
-    interval: settings.transitionTime,
+    interval: settings.transitionTime * 1000,
     type: settings.transitionEffect,
     arrows: false,
     pauseOnHover: false,

@@ -5,11 +5,12 @@ import {faker} from '@faker-js/faker';
 import draggable from "vuedraggable";
 import {Slide} from "../model/slide.ts";
 import api from '../services/api';
+import {UrlSlideContent} from "../model/urlSlideContent.js";
 
 const KEYCLOAK_URL = "https://sso.hands-on-technology.org";
 const REALM = "master";
 const CLIENT_ID = "kiosk";
-const REDIRECT_URI = encodeURIComponent("https://kiosk.hands-on-technology.org/auth");
+const REDIRECT_URI = encodeURIComponent("https://" + document.location.href + "/auth");
 
 const redirectToKeycloak = () => {
   window.location.href = `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/auth?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}`;
@@ -41,7 +42,7 @@ function isValidJwt(token) {
 const checkAuth = () => {
   const token = localStorage.getItem("jwt_token");
   if (!token || !isValidJwt(token)) {
-    //  redirectToKeycloak();
+    redirectToKeycloak();
   }
 };
 
@@ -122,43 +123,58 @@ async function fetchSettings() {
   }
 }
 
+let slide = new Slide(1, "title", UrlSlideContent)
+
+async function pushSlide() {
+  let d = new FormData
+  d.set("title", slide.title)
+  d.set("content", JSON.stringify(slide.content))
+  await api.post("/api/events/1/settings", d)
+}
+
 onMounted(fetchRounds())
 onMounted(fetchSettings())
 </script>
 
 <template>
   <h1>Kiosk Carousel</h1>
-
+  <button @click="pushSlide"></button>
   <div class="controls">
     <div class="show-round">
       <form @submit.prevent="saveRoundDisplaySetting">
         <label>VR I
           <input v-model="showRound.vr1" name="vr1" type="checkbox">
         </label>
+        <br>
         <label>VR II
           <input v-model="showRound.vr2" name="vr2" type="checkbox">
         </label>
+        <br>
         <label>VR III
           <input v-model="showRound.vr3" name="vr3" type="checkbox">
         </label>
+        <br>
         <label>AF
           <input v-model="showRound.af" name="af" type="checkbox">
         </label>
+        <br>
         <label>VF
           <input v-model="showRound.vf" name="vf" type="checkbox">
         </label>
+        <br>
         <label>HF
           <input v-model="showRound.hf" name="hf" type="checkbox">
         </label>
+        <br>
         <button type="submit">Save</button>
       </form>
     </div>
 
     <div>
       <form @change="saveSettings">
-        <label>Transition Time (sec):
+        <label>Transition Time:
           <input v-model="settings.transitionTime" max="60" min="2" type="range">
-          <span>{{ settings.transitionTime }}ms</span>
+          <span>{{ settings.transitionTime }} s</span>
         </label>
 
         <label>Transition Effect:

@@ -100,6 +100,15 @@ $h->get('/api/events/$event_id/settings', function ($event_id) {
     echo $res;
 });
 
+$h->post('/api/events/$event_id/slides', function ($event_id) {
+    $s = new controllers\SlideController($event_id);
+    try {
+        $s->addSlide();
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+});
 /*
 post('/api/events/$event_id/screens/$screen_id/slides', function($event_id, $screen_id) {
     push_slides($event_id, $screen_id);

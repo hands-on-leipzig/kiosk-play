@@ -138,8 +138,13 @@ async function fetchSlides() {
   const response = await api.get("/api/events/1/slides")
   if (response && response.data) {
     for (let slide of response.data) {
-      slides.push(slide)
+      slides.push({
+        id: slide.id,
+        title: slide.title,
+        content: JSON.parse(slide.content)
+      })
     }
+    console.log(slides)
   }
 }
 

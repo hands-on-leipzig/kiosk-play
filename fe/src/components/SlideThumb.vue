@@ -1,21 +1,24 @@
 <script setup>
-import {Slide} from "../model/slide.ts";
+import {Slide as slide, Slide} from "../model/slide.ts";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 
-defineProps({
-  slide: Slide
+const props = defineProps({
+  slideObj: Slide
 });
 
 const emit = defineEmits(['deleteSlide']);
+
+const componentSlide = slide.fromObject(props.slideObj)
 </script>
 
 <template>
   <div class="slide-thumb">
-    <span class="button-row"><fa @click="emit('deleteSlide');" :icon="['fas', 'trash-can']"></fa></span>
+    <span class="button-row"><fa :icon="['fas', 'trash-can']" @click="emit('deleteSlide');"></fa></span>
     <div class="thumb">
-      <SlideContentRenderer :slide="slide"></SlideContentRenderer>
+      <SlideContentRenderer :slide="componentSlide"></SlideContentRenderer>
     </div>
-    <span>{{ slide.title }}</span>
+    <span>{{ props.slideObj.content.type }}</span>
+    <span>{{ props.slideObj.title }}</span>
   </div>
 </template>
 

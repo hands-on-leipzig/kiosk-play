@@ -1,6 +1,7 @@
 import {SlideContent} from "./slideContent";
 import {ImageSlideContent} from "./imageSlideContent";
 import {RobotGameSlideContent} from "./robotGameSlideContent";
+import {UrlSlideContent} from "./urlSlideContent";
 
 export class Slide {
 
@@ -26,6 +27,9 @@ export class Slide {
                     case "RobotGameSlideContent":
                         content = new RobotGameSlideContent();
                         break;
+                    case "UrlSlideContent":
+                        content = new UrlSlideContent(obj['content'].url);
+                        break;
                     default:
                         console.error("Unknown slide content type: " + obj['content'].type);
                         content = null;
@@ -33,5 +37,28 @@ export class Slide {
             }
             return new Slide(obj['id'], obj['title'], content);
         });
+    }
+
+    public static fromObject(obj: InferPropType<Slide>): Slide {
+        let content: SlideContent;
+
+        // @ts-ignore
+        if (obj.content) {
+            switch (obj.content.type) {
+                case "ImageSlideContent":
+                    content = new ImageSlideContent(obj.content.imageUrl);
+                    break;
+                case "RobotGameSlideContent":
+                    content = new RobotGameSlideContent();
+                    break;
+                case "UrlSlideContent":
+                    content = new UrlSlideContent(obj.content.url);
+                    break;
+                default:
+                    console.error("Unknown slide content type: " + obj.content.type);
+                    content = null;
+            }
+        }
+        return new Slide(obj.id, obj.title, content);
     }
 }

@@ -106,7 +106,7 @@ async function saveSettings() {
   Object.keys(settings).forEach((key) => {
     d.set(key, settings[key])
   })
-  await api.post("/api/events/1/settings")
+  await api.post("/api/events/1/settings", d)
 }
 
 async function fetchSettings() {

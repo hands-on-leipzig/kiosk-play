@@ -5,8 +5,8 @@ import {faker} from '@faker-js/faker';
 import draggable from "vuedraggable";
 import {Slide} from "../model/slide.ts";
 
-const socket = inject('websocket');
-const slides = socket.slides;
+//const socket = inject('websocket');
+//const slides = socket.slides;
 
 function addSlide() {
 

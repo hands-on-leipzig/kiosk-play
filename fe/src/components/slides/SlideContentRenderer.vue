@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import {computed} from 'vue';
 import ImageSlideContentRenderer from './ImageSlideContentRenderer.vue';
 import RobotGameSlideContentRenderer from './RobotGameSlideContentRenderer.vue';
 import {ImageSlideContent} from "../../model/imageSlideContent.js";
@@ -17,7 +17,7 @@ const componentName = computed(() => {
     return ImageSlideContentRenderer;
   } else if (props.slide.content instanceof RobotGameSlideContent) {
     return RobotGameSlideContentRenderer;
-  }else if (props.slide.content instanceof UrlSlideContent) {
+  } else if (props.slide.content instanceof UrlSlideContent) {
     return UrlSlideContentRenderer;
   }
   // TODO: Add renderers for other subtypes (RobotGameScore, FlowView, etc)

@@ -14,7 +14,7 @@ class ScoreController
     /**
      * @throws \Exception
      */
-    public function getScores($event_id): array|bool|\mysqli_result|string
+    public function getScores($event_id): array
     {
         $db = new MysqlDB("contao");
         $db->dbConnect();
@@ -32,7 +32,7 @@ class ScoreController
             "name" => $data->name,
             "rounds" => array(),
         );
-$count = "";
+
         foreach (["VR", "AF", "VF", "HF"] as $round) {
             $q = "SELECT te.team_name AS name, te.id AS id, a.points AS points, r.matches AS num_matches FROM `tl_hot_round` AS r";
             $q .= " JOIN `tl_hot_tournament` AS t ON r.tournament=t.id";
@@ -55,7 +55,6 @@ $count = "";
                 $ind = $o->id;
 
                 if (!isset($maxPoints[$ind])) {
-                    $added .= $ind . ", " . $i . ";;  ";
                     $maxPoints[$ind] = "";
                 }
                 if ($o->points > $maxPoints[$ind]) {
@@ -68,20 +67,7 @@ $count = "";
                 ];
 
                 $results["rounds"][$round][$o->id]["name"] = $o->name;
-                //$results["rounds"][$round][$o->id]["scores"][] = ["points" => $o->points, "highlight" => false];
-                // qmax($results["rounds"][$round][$o->id]["scores"])
             }
-
-            // Highlight
-            /*foreach ($results["rounds"][$round] as $round) {
-                foreach ($round as $id => $team) {
-                    $team["scores"] = array_map(function ($score) use ($maxPoints, $id) {
-                        $score["highlight"] = $score["points"] == $maxPoints[$id];
-                        return $score;
-                    }, $team["scores"]);
-                }
-            }*/
-
         }
         $db->dbDisconnect();
 

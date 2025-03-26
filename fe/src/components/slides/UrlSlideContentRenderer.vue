@@ -17,5 +17,6 @@ object {
   height: 100%;
   margin: 0;
   position: relative;
+  overflow: hidden;
 }
 </style>

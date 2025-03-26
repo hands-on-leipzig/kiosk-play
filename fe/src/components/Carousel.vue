@@ -61,12 +61,13 @@ let slides = ref([
     arrows: false,
     pauseOnHover: false,
     pauseOnFocus: false,
+    pagination: false,
   }" aria-label="My Favorite Images">
     <SplideSlide v-for="slide in slides" :key="slide.id">
       <SlideContentRenderer :slide="slide" class="slide"/>
     </SplideSlide>
   </Splide>
-  <footer></footer>
+  <footer>hier kommen noch Logos hin ...</footer>
 </template>
 
 <style scoped>
@@ -85,5 +86,6 @@ footer {
   position: relative;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 </style>

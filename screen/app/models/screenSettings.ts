@@ -14,4 +14,4 @@ export class ScreenSettings {
     }
 }
 
-export const dachScreenSettings = new ScreenSettings(0, false, [], '/be/images/Hintergrund.png', 8);
+export const dachScreenSettings = new ScreenSettings(0, true, ['/be/images/logo3.png','/be/images/logo1.png','/be/images/logo2.png','/be/images/logo4.png'], '', 8);

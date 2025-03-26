@@ -11,19 +11,11 @@ interface ScreenContainerProps {
 }
 
 const ScreenContainer: React.FC<ScreenContainerProps> = ({ settings, children, style }) => {
-    const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (settings?.backgroundImage) {
-            fetchBackgroundImage(settings.backgroundImage).then(setBackgroundImage);
-        }
-    }, [settings]);
-
     return (
         <div
             className="w-screen h-screen fldex flex-col items-center justify-start bg-cover bg-center"
             style={{
-                backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
+                background: "white",
                 ...style,
             }}
         >

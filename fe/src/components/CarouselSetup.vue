@@ -10,7 +10,7 @@ import {UrlSlideContent} from "../model/urlSlideContent.js";
 const KEYCLOAK_URL = "https://sso.hands-on-technology.org";
 const REALM = "master";
 const CLIENT_ID = "kiosk";
-const REDIRECT_URI = encodeURIComponent(document.location.href + "/auth");
+const REDIRECT_URI = encodeURIComponent("https://kiosk.hands-on-technology.org/auth");
 
 const redirectToKeycloak = () => {
   window.location.href = `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/auth?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}`;
@@ -40,6 +40,7 @@ function isValidJwt(token) {
 
 // Check if user is logged in
 const checkAuth = () => {
+  if (document.location.host === "localhost:5173") return true;
   const token = localStorage.getItem("jwt_token");
   if (!token || !isValidJwt(token)) {
     redirectToKeycloak();
@@ -123,22 +124,31 @@ async function fetchSettings() {
   }
 }
 
-let slide = new Slide(1, "title", UrlSlideContent)
+let content = new UrlSlideContent("")
+let slide = new Slide(1, "title", content.toJSON())
 
 async function pushSlide() {
   let d = new FormData
   d.set("title", slide.title)
   d.set("content", JSON.stringify(slide.content))
-  await api.post("/api/events/1/settings", d)
+  await api.post("/api/events/1/slides", d)
 }
 
+async function fetchSlides() {
+  const response = await api.get("/api/events/1/slides")
+  if (response && response.data) {
+    console.log(response.data)
+  }
+}
+
+onMounted(fetchSlides())
 onMounted(fetchRounds())
 onMounted(fetchSettings())
 </script>
 
 <template>
   <h1>Kiosk Carousel</h1>
-  <button @click="pushSlide"></button>
+  <button @click="pushSlide">push slide</button>
   <div class="controls">
     <div class="show-round">
       <form @submit.prevent="saveRoundDisplaySetting">

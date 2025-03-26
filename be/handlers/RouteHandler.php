@@ -38,6 +38,28 @@ $h->get('/api/events/$event_id/data/rg-scores', function ($event_id) {
     echo $scores;
 });
 
+$h->get('/api/events/$event_id/settings', function ($event_id) {
+    $s = new controllers\SettingController($event_id);
+    try {
+        $res = $s->getSettings();
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+    echo $res;
+});
+
+$h->get('/api/events/$event_id/slides', function ($event_id) {
+    $s = new controllers\SlideController($event_id);
+    try {
+        $r = $s->fetchSlides();
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+    echo $r;
+});
+
 // endpoints needing authorization
 try {
     $h->auth();
@@ -89,17 +111,6 @@ $h->post('/api/events/$event_id/settings', function ($event_id) {
     }
 });
 
-$h->get('/api/events/$event_id/settings', function ($event_id) {
-    $s = new controllers\SettingController($event_id);
-    try {
-        $res = $s->getSettings();
-    } catch (Exception $e) {
-        http_response_code($e->getCode());
-        exit($e->getMessage());
-    }
-    echo $res;
-});
-
 $h->post('/api/events/$event_id/slides', function ($event_id) {
     $s = new controllers\SlideController($event_id);
     try {
@@ -109,13 +120,5 @@ $h->post('/api/events/$event_id/slides', function ($event_id) {
         exit($e->getMessage());
     }
 });
-/*
-post('/api/events/$event_id/screens/$screen_id/slides', function($event_id, $screen_id) {
-    push_slides($event_id, $screen_id);
-});
 
-post('/api/events/$event_id/slides', function($event_id) {
-    save_slides($event_id);
-});
-*/
 $h->any('/404', '../404.php');

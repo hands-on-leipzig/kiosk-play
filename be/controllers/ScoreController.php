@@ -16,17 +16,16 @@ class ScoreController
      */
     public function getScores($event_id): array
     {
-        $rounds_to_show = $this->getRoundsToShow($event_id);
-        var_dump($rounds_to_show);
-
+        $round_show_setting = json_decode($this->getRoundsToShow($event_id));
+        $tournament_id = $this->getTournamentId($event_id);
         $db = new MysqlDB("contao");
         $db->dbConnect();
 
         $q = "SELECT * FROM `tl_hot_tournament` AS t";
-        $q .= " WHERE t.region=$event_id";
+        $q .= " WHERE t.region=$tournament_id";
         $result = $db->execute($q);
         if ($db->num_rows == 0) {
-            throw new \Exception("No event found for id " . $this->getTournamentId($event_id), 404);
+            throw new \Exception("No event found for id " . $tournament_id, 404);
         }
 
         $data = mysqli_fetch_object($result);
@@ -36,13 +35,19 @@ class ScoreController
             "rounds" => array(),
         );
 
-        foreach (["VR", "AF", "VF", "HF"] as $round) {
+        $rounds_to_show = [];
+        if ($round_show_setting->vr1 || $round_show_setting->vr2 || $round_show_setting->vr3) $rounds_to_show[] = "VR";
+        if ($round_show_setting->af) $rounds_to_show[] = "AF";
+        if ($round_show_setting->vf) $rounds_to_show[] = "VF";
+        if ($round_show_setting->hf) $rounds_to_show[] = "HF";
+
+        foreach ($rounds_to_show as $round) {
             $q = "SELECT te.team_name AS name, te.id AS id, a.points AS points, r.matches AS num_matches FROM `tl_hot_round` AS r";
             $q .= " JOIN `tl_hot_tournament` AS t ON r.tournament=t.id";
             $q .= " JOIN `tl_hot_match` AS m ON m.round=r.id";
             $q .= " JOIN `tl_hot_assessment`AS a ON a.matchx=m.id";
             $q .= " JOIN `tl_hot_teams` AS te ON a.team=te.id";
-            $q .= " WHERE t.region=$event_id";
+            $q .= " WHERE t.region=$tournament_id";
             $q .= " AND r.type='$round'";
             $q .= " AND confirmed_team=1 AND confirmed_referee=1";
             $q .= " ORDER BY a.crdate ASC";
@@ -73,6 +78,12 @@ class ScoreController
             }
         }
         $db->dbDisconnect();
+
+        foreach ($results["rounds"]["VR"] as $t_id => $r) {
+            if (!isset($rounds_to_show["vr1"]) || !$rounds_to_show["vr1"]) unset($results["rounds"]["VR"][$t_id]["scores"][0]);
+            if (!isset($rounds_to_show["vr2"]) || !$rounds_to_show["vr2"]) unset($results["rounds"]["VR"][$t_id]["scores"][1]);
+            if (!isset($rounds_to_show["vr3"]) || !$rounds_to_show["vr3"]) unset($results["rounds"]["VR"][$t_id]["scores"][2]);
+        }
 
         return $results;
     }
@@ -114,7 +125,6 @@ class ScoreController
 
         try {
             $o = $db->selectAsObj("event", "id", "=", $event_id);
-            var_dump($event_id);
         } catch (\Exception $e) {
             throw $e;
         }

@@ -14,7 +14,7 @@ jobs:
       #- name: Update composer
       #  run: php composer.phar update
       - name: Install npm
-        run: npm install
+        run: npm install --production
       - name: Build vue app
         run: npm run build
 #      - name: Deploy FE
@@ -30,7 +30,7 @@ jobs:
 
       - name: Install screen npm
         working-directory: screen
-        run: npm install
+        run: npm install --production
       - name: Build screen app
         working-directory: screen
         run: npm run build

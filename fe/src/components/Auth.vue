@@ -11,7 +11,7 @@ onMounted(async () => {
 
   if (code) {
     try {
-      const response = await axios.post("be/api/auth", { code });
+      const response = await axios.post("/api/auth", { code });
       localStorage.setItem("jwt_token", response.data.jwt_token);
       await router.push("/setup"); // Redirect to dashboard
     } catch (error) {

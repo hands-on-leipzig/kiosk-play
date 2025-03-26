@@ -18,8 +18,9 @@ header("Access-Control-Allow-Origin: *");
 
 
 // open endpoints
-$h->post('/api/auth', function ($data) {
+$h->post('/api/auth', function () {
     $t = new controllers\TokenController();
+    $data = $_POST["code"];
     echo $t->getJWTToken($data);
 });
 

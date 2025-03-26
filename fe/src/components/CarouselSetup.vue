@@ -18,7 +18,7 @@ const redirectToKeycloak = () => {
 // Check if user is logged in
 const checkAuth = () => {
   const token = localStorage.getItem("jwt_token");
-  if (!token) {
+  if (!token || token === "") {
     redirectToKeycloak();
   }
 };
@@ -28,6 +28,7 @@ checkAuth();
 //const socket = inject('websocket');
 //const slides = socket.slides;
 let slides
+
 function addSlide() {
 
   const randomName = ref(faker.person.fullName());
@@ -68,22 +69,22 @@ async function handleSave() {
     <div class="show-round">
       <form @submit.prevent="handleSave">
         <label>VR I
-          <input name="vr1" type="checkbox" v-model="showRound.vr1">
+          <input v-model="showRound.vr1" name="vr1" type="checkbox">
         </label>
         <label>VR II
-          <input name="vr2" type="checkbox" v-model="showRound.vr2">
+          <input v-model="showRound.vr2" name="vr2" type="checkbox">
         </label>
         <label>VR III
-          <input name="vr3" type="checkbox" v-model="showRound.vr3">
+          <input v-model="showRound.vr3" name="vr3" type="checkbox">
         </label>
         <label>AF
-          <input name="af" type="checkbox" v-model="showRound.af">
+          <input v-model="showRound.af" name="af" type="checkbox">
         </label>
         <label>VF
-          <input name="vf" type="checkbox" v-model="showRound.vf">
+          <input v-model="showRound.vf" name="vf" type="checkbox">
         </label>
         <label>HF
-          <input name="hf" type="checkbox" v-model="showRound.hf">
+          <input v-model="showRound.hf" name="hf" type="checkbox">
         </label>
         <button type="submit">Save</button>
       </form>

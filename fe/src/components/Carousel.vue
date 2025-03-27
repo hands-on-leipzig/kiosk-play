@@ -72,6 +72,8 @@ function getSlide(slide) {
   }
 }
 
+let slideKey = ref(1)
+
 async function fetchSlides() {
   const response = await api.get("/api/events/1/slides")
   if (response && response.data) {
@@ -80,7 +82,11 @@ async function fetchSlides() {
       slides.push(getSlide(slide))
     }
     //splide.value.splide.refresh()
-    loaded.value = true
+    loaded.value = false
+    setTimeout(function () {
+      loaded.value = true
+    }, 1000)
+    slideKey.value++
   }
 }
 
@@ -100,7 +106,7 @@ async function fetchSettings() {
 function startFetchingSlides() {
   setInterval(function () {
     fetchSlides()
-  }, 5000)
+  }, 600000)
 }
 
 onMounted(fetchSettings)
@@ -112,11 +118,11 @@ let splide = ref()
 </script>
 
 <template>
-  <Splide v-if="loaded === true" :options="{
+  <Splide v-if="loaded === true" :key="slideKey" :options="{
     autoplay: true,
     rewind: true,
-    interval: 2000,
-    type: 'fade',
+    interval: settings.transitionTime,
+    type: settings.transitionEffect,
     arrows: false,
     pauseOnHover: false,
     pauseOnFocus: false,

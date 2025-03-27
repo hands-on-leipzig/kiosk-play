@@ -1,18 +1,34 @@
 import { WebSocketServer } from 'ws';
 
 const sockets = [];
-let slides = [
-    {
-        id:1,
-        title:"Testbild",
-        content: {
-            type: "ImageSlideContent",
-            imageUrl:"https://www.first-lego-league.org/files/relaunch2022/theme/layout/fll/logo/vertical/FIRSTLego_IconVert_RGB.png"
-        }
-    }
-];
+let slides = [];
+
+let index = 0;
+let duration = 10 * 1000;
 
 const wss = new WebSocketServer({port: 3000});
+
+setInterval(() => {
+    let newIndex = index + 1;
+    if (index >= slides.length) {
+        newIndex = 0;
+    }
+
+    console.log("new index", newIndex);
+
+    if (slides.length === 0) {
+        return;
+    }
+
+    index = newIndex;
+    const currentSlide = slides[newIndex];
+    console.log("new slide", currentSlide);
+
+    sendMessage(JSON.stringify({
+        type: 'setCurrentSlide',
+        slide: currentSlide
+    }));
+}, duration);
 
 wss.on('connection', (ws) => {
     console.log('Connection established');
@@ -28,11 +44,10 @@ wss.on('connection', (ws) => {
         sockets.splice(index, 1);
     });
 
-    console.log("Sending slides", slides);
-    ws.send(JSON.stringify({
+    /*ws.send(JSON.stringify({
         type: 'setSlides',
         slides: slides
-    }));
+    }));*/
 })
 
 
@@ -45,7 +60,8 @@ function handleMessage(message, origin) {
             break;
         case 'saveSlides':
             slides = message.slides;
-            sendSlidesMatching((socket) => socket !== origin);
+            console.log("saved slides", slides);
+            // sendSlidesMatching((socket) => socket !== origin);
     }
 }
 
@@ -55,6 +71,13 @@ function sendSlidesMatching(shouldSend) {
             continue;
         }
         sendSlides(socket)
+    }
+}
+
+function sendMessage(message) {
+    console.log("Sending message to all clients: ", message);
+    for (const socket of sockets) {
+        socket.send(message);
     }
 }
 

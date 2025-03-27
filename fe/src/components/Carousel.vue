@@ -16,8 +16,10 @@ import {SlideContent} from "../model/slideContent.js";
 const socket = inject('websocket');
 socket.registerClient();
 socket.addListener((msg) => {
-  slide.value = msg.slide
-  showSlide.value = true
+  if (msg.type === 'setCurrentSlide') {
+    slide.value = Slide.fromObject(msg.slide);
+    showSlide.value = true
+  }
 });
 
 function getFormattedDateTime() {

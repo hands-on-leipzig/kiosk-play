@@ -148,7 +148,7 @@ const sendMessage = inject('sendMessage');
 
 function sendUpdateMessage() {
   if (sendMessage) {
-    sendMessage({ type: 'updateCarousel', message: 'Slides updated' });
+    sendMessage({ type: 'pushSlide', slide: 'Slides updated' });
     console.log("Message sent to Carousel");
   } else {
     console.error("Send function not available");

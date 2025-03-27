@@ -7,6 +7,15 @@ console.log(`WebSocket server started on ws://localhost:${PORT}/ws`);
 
 const clients = new Set();
 
+function broadcast(data) {
+    const message = JSON.stringify(data);
+    clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(message);
+            console.log('Broadcasting message:', message);
+        }
+    });
+}
 server.on('connection', (ws) => {
     console.log('Client connected');
     clients.add(ws);
@@ -16,7 +25,6 @@ server.on('connection', (ws) => {
 
         try {
             const msg = JSON.parse(message);
-
             switch (msg.type) {
                 case 'register':
                     console.log(`Registered client: ${msg.clientId}`);
@@ -26,7 +34,8 @@ server.on('connection', (ws) => {
                     console.log('Received slides:', msg.slides);
                     broadcast({ type: 'setSlides', slides: msg.slides });
                     break;
-
+                case 'pushSlide':
+                    broadcast({ type: 'pushSlide', slide: msg.slide });
                 default:
                     console.warn('Unknown message type:', msg.type);
             }
@@ -44,12 +53,3 @@ server.on('connection', (ws) => {
         console.error('WebSocket error:', error);
     });
 });
-
-function broadcast(data) {
-    const message = JSON.stringify(data);
-    clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(message);
-        }
-    });
-}

@@ -11,15 +11,13 @@ import {Slide} from "../model/slide.js";
 import {ImageSlideContent} from "../model/imageSlideContent.js";
 import {RobotGameSlideContent} from "../model/robotGameSlideContent.js";
 import {UrlSlideContent} from "../model/urlSlideContent.js";
-
-
+import {SlideContent} from "../model/slideContent.js";
 
 const socket = inject('websocket');
 socket.registerClient();
 socket.addListener((msg) => {
-
-  console.log("msg in carusell: ", msg);
-  // TODO do some specific listening here (e.g. pausing or setting the delay)
+  slide.value = msg.slide
+  showSlide.value = true
 });
 
 function getFormattedDateTime() {
@@ -72,7 +70,8 @@ function getSlide(slide) {
   }
 }
 
-let slideKey = ref(1)
+let slide = ref()
+let showSlide = ref(false)
 
 async function fetchSlides() {
   const response = await api.get("/api/events/1/slides")
@@ -81,8 +80,6 @@ async function fetchSlides() {
     for (let slide of response.data) {
       slides.push(getSlide(slide))
     }
-    //splide.value.splide.refresh()
-    loaded.value = false
     setTimeout(function () {
       loaded.value = true
     }, 1000)
@@ -110,28 +107,13 @@ function startFetchingSlides() {
 }
 
 onMounted(fetchSettings)
-onMounted(startFetchingSlides)
-onMounted(fetchSlides)
-
-let splide = ref()
+//onMounted(startFetchingSlides)
+//onMounted(fetchSlides)
 
 </script>
 
 <template>
-  <Splide v-if="loaded === true" :key="slideKey" :options="{
-    autoplay: true,
-    rewind: true,
-    interval: settings.transitionTime,
-    type: settings.transitionEffect,
-    arrows: false,
-    pauseOnHover: false,
-    pauseOnFocus: false,
-    pagination: false
-  }" aria-label="My Favorite Images">
-    <SplideSlide v-for="slide in slides" :key="slide.id">
-      <SlideContentRenderer :slide="slide" class="slide"/>
-    </SplideSlide>
-  </Splide>
+  <SlideContentRenderer v-if="showSlide === true" :slide="slide" class="slide"/>
   <footer>
     <div>
       <img :src="logo1_cut" alt="logo">

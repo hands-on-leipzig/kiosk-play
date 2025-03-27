@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 const PORT = 3042;
-const HOST = '0.0.0.0';
+const HOST = 'wss://kiosk.hands-on-technology.org/ws';
 
 const server = new WebSocket.Server({host: HOST, port: PORT});
 

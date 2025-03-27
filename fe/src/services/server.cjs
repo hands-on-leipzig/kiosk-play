@@ -1,9 +1,10 @@
 const WebSocket = require('ws');
 const PORT = 3042;
+const HOST = '0.0.0.0';
 
-const server = new WebSocket.Server({ port: PORT });
+const server = new WebSocket.Server({host: HOST, port: PORT});
 
-console.log(`WebSocket server started on ws://localhost:${PORT}/ws`);
+console.log(`WebSocket server started on ws://${HOST}:${PORT}/ws`);
 
 const clients = new Set();
 
@@ -16,6 +17,7 @@ function broadcast(data) {
         }
     });
 }
+
 server.on('connection', (ws) => {
     console.log('Client connected');
     clients.add(ws);
@@ -32,10 +34,10 @@ server.on('connection', (ws) => {
 
                 case 'saveSlides':
                     console.log('Received slides:', msg.slides);
-                    broadcast({ type: 'setSlides', slides: msg.slides });
+                    broadcast({type: 'setSlides', slides: msg.slides});
                     break;
                 case 'pushSlide':
-                    broadcast({ type: 'pushSlide', slide: msg.slide });
+                    broadcast({type: 'pushSlide', slide: msg.slide});
                 default:
                     console.warn('Unknown message type:', msg.type);
             }

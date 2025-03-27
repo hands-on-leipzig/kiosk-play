@@ -1,10 +1,10 @@
-/*import {Slide} from "../../model/slide.js";
+import {Slide} from "../../model/slide.js";
 import {ImageSlideContent} from "../../model/imageSlideContent.js";
 import {ref, watch} from "vue";
 import type {Ref} from "vue";
 
 const listeners = [];
-const websocket = new WebSocket('ws://localhost:3000/ws'); // local testserver
+const websocket = new WebSocket('ws://localhost:3042/ws'); // local testserver
 
 export const slides: Ref<Slide[]> = ref([]);
 
@@ -40,6 +40,15 @@ export function registerClient() {
     websocket.send(JSON.stringify({ type: 'register', clientId: navigator.userAgent }));
   });
 }
+export function sendMessage(data: any) {
+    if (websocket.readyState === WebSocket.OPEN) {
+        websocket.send(JSON.stringify(data));
+        console.log("Message sent:", data);
+    } else {
+        console.warn("WebSocket is not open. Current state:", websocket.readyState);
+    }
+}
+
 
 export function addListener(listener) {
   listeners.push(listener);
@@ -56,4 +65,3 @@ function handleEvent(event) {
         break;
   }
 }
-*/

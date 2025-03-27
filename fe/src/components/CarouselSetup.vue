@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, reactive, ref} from "vue";
+import {inject, onMounted, reactive, ref} from "vue";
 import SlideThumb from "./SlideThumb.vue";
 import draggable from "vuedraggable";
 import {Slide} from "../model/slide.ts";
@@ -143,6 +143,18 @@ function chooseNewSlide() {
   newSlide.value = true
 }
 
+const socket = inject('websocket');
+const sendMessage = inject('sendMessage');
+
+function sendUpdateMessage() {
+  if (sendMessage) {
+    sendMessage({ type: 'pushSlide', slide: 'Slides updated' });
+    console.log("Message sent to Carousel");
+  } else {
+    console.error("Send function not available");
+  }
+}
+
 onMounted(fetchSlides)
 onMounted(fetchRounds)
 onMounted(fetchSettings)
@@ -150,6 +162,7 @@ onMounted(fetchSettings)
 
 <template>
   <h1>Kiosk Carousel</h1>
+  <button @click="sendUpdateMessage">Notify Carousel</button>
   <div class="controls">
     <div class="show-round">
       <form @submit.prevent="saveRoundDisplaySetting">

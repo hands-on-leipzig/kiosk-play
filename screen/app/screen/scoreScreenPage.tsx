@@ -17,7 +17,7 @@ export default function ScoreScreenPage() {
     }
 
     const [competition, setCompetition] = useState<Competition | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [error] = useState<string | null>(null);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
@@ -28,15 +28,21 @@ export default function ScoreScreenPage() {
     const TOURNAMENT_ID = 1;
 
     useEffect(() => {
-        // Load DACH data
+        // Refresh DATA every 5 minutes
+        const interval = setInterval(loadDACHData, 5 * 60 * 1000);
+        setSettings(dachScreenSettings);
+        setTeamsPerPage(dachScreenSettings.teamsPerPage!);
+        loadDACHData();
+        return () => clearInterval(interval);
+    }, []);
+
+    const loadDACHData = useCallback(() => {
         fetch(`https://kiosk.hands-on-technology.org/api/events/${TOURNAMENT_ID}/data/rg-scores`)
             .then((response) => response.json())
             .then((data) => {
                 setCompetition(new Competition(0, 1, data.name, [data]));
             })
-            .catch((error) => setError(error.message));
-        setSettings(dachScreenSettings);
-        setTeamsPerPage(dachScreenSettings.teamsPerPage!);
+            .catch((error) => console.error(error.message));
     }, []);
 
     const advancePage = useCallback(() => {

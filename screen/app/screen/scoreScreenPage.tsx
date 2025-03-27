@@ -109,7 +109,7 @@ export default function ScoreScreenPage() {
                 team.id = key;
 
                 const scores = sortScores(team);
-                const realRounds = scores.filter(s => s > 0).length;
+                const realRounds = scores.filter((s) => s > 0).length;
                 const maxScore = scores[0];
                 team.scores = team.scores.map((score: Score) => {
                     score.highlight = +score.points === maxScore && maxScore > 0 && realRounds > 1;

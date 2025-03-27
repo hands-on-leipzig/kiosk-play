@@ -4,7 +4,7 @@ import {ref, watch} from "vue";
 import type {Ref} from "vue";
 
 const listeners = [];
-const websocket = new WebSocket('wss://' + location.hostname +  ':3042/ws');
+const websocket = new WebSocket('ws://' + location.hostname +  ':3042/ws');
 
 export const slides: Ref<Slide[]> = ref([]);
 

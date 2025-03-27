@@ -1,6 +1,6 @@
 <script setup>
 import '@splidejs/vue-splide/css';
-import {onMounted, reactive, ref} from "vue";
+import {inject, onMounted, reactive, ref} from "vue";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 import logo1_cut from "../assets/img/logo1_cut.png";
 import logo2_cut from "../assets/img/logo2_cut.png";
@@ -13,14 +13,14 @@ import {RobotGameSlideContent} from "../model/robotGameSlideContent.js";
 import {UrlSlideContent} from "../model/urlSlideContent.js";
 
 
-/*const socket = inject('websocket');
+
+const socket = inject('websocket');
 socket.registerClient();
 socket.addListener((msg) => {
+
   console.log("msg in carusell: ", msg);
   // TODO do some specific listening here (e.g. pausing or setting the delay)
 });
-
-let slides = ref(socket.slides);*/
 
 function getFormattedDateTime() {
   const now = new Date();

@@ -1,4 +1,4 @@
-import Auth from "./components/Auth.vue";
+import Auth from "./components/Auth.vue"
 import './assets/main.css'
 
 import {createApp} from 'vue'
@@ -11,6 +11,7 @@ import CarouselSetup from "./components/CarouselSetup.vue";
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faEarth, faImage, faPlusCircle, faTrashCan} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import {sendMessage} from "./components/websocket/SlideSocket.js";
 
 library.add(faPlusCircle, faTrashCan, faImage, faEarth);
 
@@ -26,6 +27,8 @@ const router = createRouter({
 })
 
 const app = createApp(App)
+
+app.provide('sendMessage', sendMessage);
 app.use(VueSplide)
 app.use(router)
 app.component('fa', FontAwesomeIcon);

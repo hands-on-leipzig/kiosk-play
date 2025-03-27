@@ -25,7 +25,7 @@ setInterval(() => {
     console.log("new slide", currentSlide);
 
     sendMessage(JSON.stringify({
-        type: 'setCurrentSlide',
+        type: 'pushSlide',
         slide: currentSlide
     }));
 }, duration);

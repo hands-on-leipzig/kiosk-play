@@ -16,7 +16,7 @@ import {SlideContent} from "../model/slideContent.js";
 const socket = inject('websocket');
 socket.registerClient();
 socket.addListener((msg) => {
-  if (msg.type === 'setCurrentSlide') {
+  if (msg.type === 'pushSlide') {
     slide.value = Slide.fromObject(msg.slide);
     showSlide.value = true
   }

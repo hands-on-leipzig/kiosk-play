@@ -25,4 +25,11 @@ class SlideController extends Controller
         return json_encode($this->db->select("SELECT slides.id AS id, slides.title AS title, slides.content AS content FROM slides JOIN screen ON slides.screen = screen.id WHERE screen.event = " . $this->event_id));
     }
 
+    public function saveSlidesOrder(): void
+    {
+        $slides = json_decode($_POST["slides"]);
+        foreach ($slides as $i => $slide) {
+            $this->db->execute("UPDATE slides SET sort = $i WHERE id = " . $slide->id . " AND screen = 1");
+        }
+    }
 }

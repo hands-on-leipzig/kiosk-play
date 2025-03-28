@@ -35,6 +35,23 @@ a,
 }
 */
 
+@font-face {
+    font-family: 'Uniform';
+    src: url("font/Uniform-Regular.otf") format('opentype');
+}
+
+@font-face {
+    font-family: 'Uniform';
+    src: url("font/Uniform-Bold.otf") format('opentype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Uniform Condensed';
+    src: url("font/UniformCondensed-Regular.otf") format('opentype');
+}
+
 body {
     margin: 0;
+    font-family: Uniform, SansSerif;
 }

@@ -39,7 +39,10 @@ function getFormattedDateTime() {
   return `${year}-${month}-${day}+${hours}:${minutes}`;
 }
 
-/*let slides = ref([
+import qrPlan from '../assets/imgSlides/qr-plan.png'
+import {PhotoSlideContent} from "../model/photoSlideContent.js";
+
+/*let kubia = ref([
     new Slide(1, "rg-scores", new UrlSlideContent("https://kiosk.hands-on-technology.org/screen.html")),
     new Slide(2, "currently-running", new UrlSlideContent("https://flow.hands-on-technology.org/output/zeitplan.cgi?plan=160&role=14&brief=no&output=slide&hours=1&now=" + getFormattedDateTime())),
     new Slide(3, "plan-qr", new ImageSlideContent(qrPlan)),
@@ -58,7 +61,8 @@ function getSlide(slide) {
   let types = {
     image: new ImageSlideContent("").toJSON().type,
     rg: new RobotGameSlideContent().toJSON().type,
-    url: new UrlSlideContent("").toJSON().type
+    url: new UrlSlideContent("").toJSON().type,
+    photo: new PhotoSlideContent("").toJSON().type
   }
 
   let content = JSON.parse(slide.content)
@@ -69,6 +73,8 @@ function getSlide(slide) {
       return new Slide(slide.id, slide.title, new RobotGameSlideContent())
     case types.url:
       return new Slide(slide.id, slide.title, new UrlSlideContent(content.url))
+    case types.photo:
+      return new Slide(slide.id, slide.title, new PhotoSlideContent())
   }
 }
 
@@ -81,7 +87,6 @@ async function fetchSlides() {
     for (let slide of response.data) {
       slides.push(getSlide(slide))
     }
-    //splide.value.splide.refresh()
     loaded.value = false
     setTimeout(function () {
       loaded.value = true
@@ -112,7 +117,10 @@ function startFetchingSlides() {
 onMounted(fetchSettings)
 onMounted(startFetchingSlides)
 onMounted(fetchSlides)
-
+/*onMounted(setInterval(function() {
+  location.reload()
+}, 300000))
+*/
 let splide = ref()
 
 </script>
@@ -121,7 +129,7 @@ let splide = ref()
   <Splide v-if="loaded === true" :key="slideKey" :options="{
     autoplay: true,
     rewind: true,
-    interval: settings.transitionTime,
+    interval: settings.transitionTime * 1000,
     type: settings.transitionEffect,
     arrows: false,
     pauseOnHover: false,
@@ -132,7 +140,7 @@ let splide = ref()
       <SlideContentRenderer :slide="slide" class="slide"/>
     </SplideSlide>
   </Splide>
-  <footer>
+  <!--<footer>
     <div>
       <img :src="logo1_cut" alt="logo">
     </div>
@@ -145,7 +153,7 @@ let splide = ref()
     <div>
       <img :src="logo4" alt="logo">
     </div>
-  </footer>
+  </footer>-->
 </template>
 
 <style scoped>
@@ -172,7 +180,7 @@ footer img {
 
 .slide {
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   position: relative;
   margin: 0;
   padding: 0;

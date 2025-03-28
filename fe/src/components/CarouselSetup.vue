@@ -58,9 +58,15 @@ function addSlide() {
   slides.push(new Slide(slides.length + 1, "randomName", new UrlSlideContent("url")));
 }
 
-function updateOrder() {
-  console.log("Updated order:", slides); // Logs new order for debugging
+async function updateOrder() {
+  let d = new FormData
+  d.set("slides", JSON.stringify(slides))
+  const response = await api.post("/api/events/1/slides-order", d)
+  slidesKey.value++
+  //console.log("Updated order:", slides); // Logs new order for debugging
 }
+
+const slidesKey = ref(1)
 
 function deleteSlide(slide) {
   console.log("Deleting slide", slide.title);
@@ -204,7 +210,7 @@ onMounted(fetchSettings)
     <div class="add-slide" @click="chooseNewSlide">
       <fa :icon="['fas', 'plus-circle']"></fa>
     </div>
-    <draggable v-model="slides" class="draggable-list" ghost-class="ghost" group="slides" item-key="id"
+    <draggable v-model="slides" :key="slidesKey" class="draggable-list" ghost-class="ghost" group="slides" item-key="id"
                @end="updateOrder">
       <template #item="{ element }">
         <SlideThumb :slide="element" @deleteSlide="deleteSlide(element)"></SlideThumb>

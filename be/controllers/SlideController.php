@@ -22,7 +22,7 @@ class SlideController extends Controller
 
     public function fetchSlides(): string
     {
-        return json_encode($this->db->select("SELECT slides.id AS id, slides.title AS title, slides.content AS content FROM slides JOIN screen ON slides.screen = screen.id WHERE screen.event = " . $this->event_id));
+        return json_encode($this->db->select("SELECT slides.id AS id, slides.title AS title, slides.content AS content FROM slides JOIN screen ON slides.screen = screen.id WHERE screen.event = " . $this->event_id . " ORDER BY sort"));
     }
 
     public function saveSlidesOrder(): void

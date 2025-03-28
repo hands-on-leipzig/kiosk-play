@@ -2,6 +2,7 @@ import {SlideContent} from "./slideContent";
 import {ImageSlideContent} from "./imageSlideContent";
 import {RobotGameSlideContent} from "./robotGameSlideContent";
 import {UrlSlideContent} from "./urlSlideContent";
+import {PhotoSlideContent} from "./photoSlideContent";
 
 export class Slide {
 
@@ -30,6 +31,9 @@ export class Slide {
                     case "UrlSlideContent":
                         content = new UrlSlideContent(obj['content'].url);
                         break;
+                    case "PhotoSlideContent":
+                        content = new PhotoSlideContent();
+                        break;
                     default:
                         console.error("Unknown slide content type: " + obj['content'].type);
                         content = null;
@@ -53,6 +57,9 @@ export class Slide {
                     break;
                 case "UrlSlideContent":
                     content = new UrlSlideContent(obj.content.url);
+                    break;
+                case "PhotoSlideContent":
+                    content = new PhotoSlideContent();
                     break;
                 default:
                     console.error("Unknown slide content type: " + obj.content.type);

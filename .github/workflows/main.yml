@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - main
+      - slider-based
 jobs:
   deploy-prod:
     runs-on: ubuntu-latest

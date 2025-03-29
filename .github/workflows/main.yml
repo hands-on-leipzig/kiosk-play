@@ -6,7 +6,7 @@ on:
 jobs:
   deploy-prod:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/slider-based'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

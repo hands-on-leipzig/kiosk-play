@@ -1,6 +1,5 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { Competition } from '../models/competition';
 import { Score } from '../models/score';
@@ -9,12 +8,12 @@ import { dachScreenSettings, ScreenSettings } from '../models/screenSettings';
 import ScreenContainer from '../components/ScreenContainer';
 
 export default function ScoreScreenPage() {
-    const searchParams = useSearchParams();
+    /*const searchParams = useSearchParams();
 
     let round = searchParams.get('round')?.toUpperCase() ?? 'VR';
     if (!['VR', 'AF', 'VF'].includes(round)) {
         round = 'VR';
-    }
+    }*/
 
     const [competition, setCompetition] = useState<Competition | null>(null);
     const [error] = useState<string | null>(null);
@@ -100,13 +99,14 @@ export default function ScoreScreenPage() {
         );
     }
 
-    // @ts-expect-error - different data structure when using kiosk API
-    const vr = competition?.categories[0]['rounds'][round];
+    let round: string | undefined;
+    // @ts-expect-error data structure not in TS yet
+    const selectedScores = getRoundToShow(competition?.categories[0]['rounds']);
     let teams =
-        vr &&
-        Object.keys(vr)
+        selectedScores &&
+        Object.keys(selectedScores)
             ?.map((key) => {
-                const team = vr[key];
+                const team = selectedScores[key];
                 team.id = key;
 
                 const scores = sortScores(team);
@@ -135,6 +135,25 @@ export default function ScoreScreenPage() {
                 return 0;
             });
     teams = assignRanks(teams);
+
+    function getRoundToShow(rounds: object) {
+        if (!rounds) {
+            return null;
+        }
+
+        const keys = Object.keys(rounds);
+        if (keys.length === 0) {
+            return null;
+        }
+        for (const key of ['VF', 'AF', 'VR']) {
+            if (keys.includes(key)) {
+                round = key;
+                // @ts-expect-error - data structure not in TS yet
+                return rounds[key];
+            }
+        }
+        return null;
+    }
 
     function assignRanks(teams: Team[] | undefined): Team[] | undefined {
         if (!teams || teams.length === 0) {

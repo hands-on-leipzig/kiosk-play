@@ -47,14 +47,15 @@ export default function ScoreScreenPage() {
 
     const advancePage = useCallback(() => {
         setCurrentIndex((prevIndex) => {
-            if (!competition || prevIndex + teamsPerPage > teams.length) return 0;
+            if (!teams || !competition) return 0;
+            if (prevIndex + teamsPerPage > teams.length) return 0;
             return (prevIndex + teamsPerPage) % teams.length;
         });
     }, [competition, teamsPerPage]);
 
     const previousPage = useCallback(() => {
         setCurrentIndex((prevIndex) => {
-            if (prevIndex === 0 && competition) {
+            if (prevIndex === 0 && competition && teams) {
                 const teamsLastPage = teams.length % teamsPerPage;
                 if (teamsLastPage === 0) {
                     return teams.length - teamsPerPage;

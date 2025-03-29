@@ -22,8 +22,8 @@ onMounted(getRandomImage);
 
 <style scoped>
 .slide-image {
-  width: 100%;
-  height: 100%;
+  min-width: 100vw;
+  min-height: 100vh;
   margin: 0;
   position: relative;
   overflow: hidden;

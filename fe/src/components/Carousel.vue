@@ -111,7 +111,7 @@ async function fetchSettings() {
 function startFetchingSlides() {
   setInterval(function () {
     fetchSlides()
-  }, 600000)
+  }, 300000)
 }
 
 onMounted(fetchSettings)

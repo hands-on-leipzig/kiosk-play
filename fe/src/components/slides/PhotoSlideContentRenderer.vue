@@ -24,7 +24,7 @@ onMounted(getRandomImage);
 .slide-image {
   min-width: 100vw;
   min-height: 100vh;
-  margin: 0;
+  margin: auto auto;
   position: relative;
   overflow: hidden;
 }

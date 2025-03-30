@@ -17,12 +17,12 @@ const expectedScores: { [round in Round]: number } = {
     HF: 1,
 };
 
-const roundNames: { [round in Round]: string} = {
-    VR: "Vorrunden",
-    AF: "Achtelfinale",
-    VF: "Viertelfinale",
-    HF: "Halbfinale"
-}
+const roundNames: { [round in Round]: string } = {
+    VR: 'Vorrunden',
+    AF: 'Achtelfinale',
+    VF: 'Viertelfinale',
+    HF: 'Halbfinale',
+};
 
 type ScoresResponse = {
     id: string;
@@ -213,7 +213,9 @@ export default function ScoreScreenPage() {
 
     return (
         <ScreenContainer settings={settings}>
-            <h1 className="text-gray text-4xl font-bold px-4 py-12 rounded-lg text-center">ERGEBNISSE {round && roundNames[round].toUpperCase()}: {competition?.name?.toUpperCase()}</h1>
+            <h1 className="text-gray text-4xl font-bold px-4 py-12 rounded-lg text-center">
+                ERGEBNISSE {round && roundNames[round].toUpperCase()}: {competition?.name?.toUpperCase()}
+            </h1>
 
             <div className="text-gray text-5xl rounded-lg p-20">
                 {error && <div className="text-red-500">{error}</div>}

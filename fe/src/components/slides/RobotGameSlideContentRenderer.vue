@@ -6,8 +6,9 @@ import {onMounted, onUnmounted, ref, computed} from "vue";
 type ScoresResponse = { name?: string, rounds?: RoundResponse }
 type RoundResponse = { [key: string]: TeamResponse }
 type TeamResponse = { [key: string]: Team }
-type Team = { name: string, scores: Score[], rank: number }
+type Team = { name: string, scores: Score[], rank: number, id: number }
 type Score = { points: number; highlight: boolean }
+type Round = 'VR' | 'AF' | 'VF' | 'HF';
 
 const expectedScores: { [round in Round]: number } = {
   VR: 3,
@@ -122,7 +123,7 @@ function getRoundToShow(rounds: RoundResponse): TeamResponse {
 // Load data function
 function loadDACHData() {
   api.get('/api/events/1/data/rg-scores')
-      .then((response: Response) => {
+      .then((response) => {
         scores.value = response.data;
       })
       .catch((err) => {
@@ -216,8 +217,7 @@ const props = defineProps({
         <tr v-for="team in paginatedTeams" :key="team.id">
           <td class="teamName">{{ team.name }}</td>
           <template v-for="(score, index) in team.scores" :key="index">
-            <td class="cell"
-                :style="{ background: score.highlight ? '#F78B1F' : 'none' }">
+            <td class="cell" :class="{ highlight: score.highlight }">
               {{ score.points }}
             </td>
           </template>
@@ -230,6 +230,7 @@ const props = defineProps({
 </template>
 
 <style scoped>
+
 .slide-container {
   height: 100%;
   position: relative;
@@ -280,5 +281,9 @@ td {
 tr > td:not(:last-child),
 tr > th:not(:last-child) {
   border-right: 1px solid white;
+}
+
+.highlight {
+  background-color: v-bind('props.content.highlightColor');
 }
 </style>

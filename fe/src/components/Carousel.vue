@@ -82,7 +82,9 @@ async function fetchSlides() {
   }*/
   loaded.value = true;
   showSlide.value = true;
-  slide.value = new Slide(1, "Test-Scores", new RobotGameSlideContent());
+  const content = new RobotGameSlideContent();
+  content.highlightColor = '#F78B1F';
+  slide.value = new Slide(1, "Test-Scores", content);
 }
 
 async function fetchSettings() {

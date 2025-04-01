@@ -2,10 +2,6 @@
 import '@splidejs/vue-splide/css';
 import {inject, onMounted, reactive, ref} from "vue";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
-import logo1_cut from "../assets/img/logo1_cut.png";
-import logo2_cut from "../assets/img/logo2_cut.png";
-import logo3_cut from "../assets/img/logo3_cut.png";
-import logo4 from "../assets/img/logo4.png";
 import api from "../services/api.js";
 import {Slide} from "../model/slide.js";
 import {ImageSlideContent} from "../model/imageSlideContent.js";
@@ -74,7 +70,7 @@ let showSlide = ref(false)
 let slideKey = ref(1)
 
 async function fetchSlides() {
-  const response = await api.get("/api/events/1/slides")
+  /*const response = await api.get("/api/events/1/slides")
   if (response && response.data) {
     slides = []
     for (let slide of response.data) {
@@ -85,7 +81,9 @@ async function fetchSlides() {
       loaded.value = true
     }, 1000)
     slideKey.value++
-  }
+  }*/
+  loaded.value = true;
+  slides.value.push(new Slide(1, "Test-Scores", new RobotGameSlideContent()));
 }
 
 async function fetchSettings() {

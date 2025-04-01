@@ -62,6 +62,18 @@ $h->get('/api/events/$event_id/slides', function ($event_id) {
     echo $r;
 });
 
+$h->get('/api/events/$event_id/randomphoto', function ($event_id) {
+    $i = new controllers\ImageController();
+    try {
+        $r = $i->getRandomPhoto();
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+    header('Content-Type: application/json');
+    echo $r;
+});
+
 // endpoints needing authorization
 try {
     $h->auth();
@@ -117,6 +129,16 @@ $h->post('/api/events/$event_id/slides', function ($event_id) {
     $s = new controllers\SlideController($event_id);
     try {
         $s->addSlide();
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+});
+
+$h->post('/api/events/$event_id/slides-order', function ($event_id) {
+    $s = new controllers\SlideController($event_id);
+    try {
+        $s->saveSlidesOrder();
     } catch (Exception $e) {
         http_response_code($e->getCode());
         exit($e->getMessage());

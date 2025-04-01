@@ -14,7 +14,7 @@ class ScoreController
     /**
      * @throws \Exception
      */
-    public function getScores($event_id): array
+    public function getScores($event_id): array|string
     {
         $round_show_setting = json_decode($this->getRoundsToShow($event_id));
         $tournament_id = $this->getTournamentId($event_id);
@@ -78,6 +78,8 @@ class ScoreController
             }
         }
         $db->dbDisconnect();
+
+        if (empty($results["rounds"])) return $results;
 
         foreach ($results["rounds"]["VR"] as $t_id => $r) {
             if (!$round_show_setting->vr1) $results["rounds"]["VR"][$t_id]["scores"][0]["points"] = 0;

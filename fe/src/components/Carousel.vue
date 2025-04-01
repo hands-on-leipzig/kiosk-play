@@ -11,7 +11,7 @@ import {Slide} from "../model/slide.js";
 import {ImageSlideContent} from "../model/imageSlideContent.js";
 import {RobotGameSlideContent} from "../model/robotGameSlideContent.js";
 import {UrlSlideContent} from "../model/urlSlideContent.js";
-import {SlideContent} from "../model/slideContent.js";
+import {PhotoSlideContent} from "../model/photoSlideContent.js";
 
 const socket = inject('websocket');
 socket.registerClient();
@@ -39,12 +39,6 @@ function getFormattedDateTime() {
   return `${year}-${month}-${day}+${hours}:${minutes}`;
 }
 
-/*let slides = ref([
-    new Slide(1, "rg-scores", new UrlSlideContent("https://kiosk.hands-on-technology.org/screen.html")),
-    new Slide(2, "currently-running", new UrlSlideContent("https://flow.hands-on-technology.org/output/zeitplan.cgi?plan=160&role=14&brief=no&output=slide&hours=1&now=" + getFormattedDateTime())),
-    new Slide(3, "plan-qr", new ImageSlideContent(qrPlan)),
-])*/
-
 let slides = ref([])
 
 let settings = reactive({
@@ -58,7 +52,8 @@ function getSlide(slide) {
   let types = {
     image: new ImageSlideContent("").toJSON().type,
     rg: new RobotGameSlideContent().toJSON().type,
-    url: new UrlSlideContent("").toJSON().type
+    url: new UrlSlideContent("").toJSON().type,
+    photo: new PhotoSlideContent("").toJSON().type
   }
 
   let content = JSON.parse(slide.content)
@@ -69,11 +64,14 @@ function getSlide(slide) {
       return new Slide(slide.id, slide.title, new RobotGameSlideContent())
     case types.url:
       return new Slide(slide.id, slide.title, new UrlSlideContent(content.url))
+    case types.photo:
+      return new Slide(slide.id, slide.title, new PhotoSlideContent())
   }
 }
 
 let slide = ref()
 let showSlide = ref(false)
+let slideKey = ref(1)
 
 async function fetchSlides() {
   const response = await api.get("/api/events/1/slides")
@@ -82,6 +80,7 @@ async function fetchSlides() {
     for (let slide of response.data) {
       slides.push(getSlide(slide))
     }
+    loaded.value = false
     setTimeout(function () {
       loaded.value = true
     }, 1000)
@@ -105,12 +104,16 @@ async function fetchSettings() {
 function startFetchingSlides() {
   setInterval(function () {
     fetchSlides()
-  }, 600000)
+  }, 300000)
 }
 
 onMounted(fetchSettings)
-//onMounted(startFetchingSlides)
-//onMounted(fetchSlides)
+onMounted(startFetchingSlides)
+onMounted(fetchSlides)
+/*onMounted(setInterval(function() {
+  location.reload()
+}, 300000))
+*/
 
 </script>
 

@@ -1,22 +1,44 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Competition } from '../models/competition';
 import { Score } from '../models/score';
 import { Team } from '../models/team';
 import { dachScreenSettings, ScreenSettings } from '../models/screenSettings';
 import ScreenContainer from '../components/ScreenContainer';
 
+type TeamResponse = { [id: number]: Team };
+type Round = 'VR' | 'AF' | 'VF' | 'HF';
+type RoundResponse = { [round in Round]: TeamResponse };
+
+const expectedScores: { [round in Round]: number } = {
+    VR: 3,
+    AF: 1,
+    VF: 1,
+    HF: 1,
+};
+
+const roundNames: { [round in Round]: string } = {
+    VR: 'Vorrunden',
+    AF: 'Achtelfinale',
+    VF: 'Viertelfinale',
+    HF: 'Halbfinale',
+};
+
+type ScoresResponse = {
+    id: string;
+    name: string;
+    rounds: RoundResponse;
+};
+
 export default function ScoreScreenPage() {
-    const searchParams = useSearchParams();
+    /*const searchParams = useSearchParams();
 
     let round = searchParams.get('round')?.toUpperCase() ?? 'VR';
     if (!['VR', 'AF', 'VF'].includes(round)) {
         round = 'VR';
-    }
+    }*/
 
-    const [competition, setCompetition] = useState<Competition | null>(null);
+    const [competition, setCompetition] = useState<ScoresResponse | null>(null);
     const [error] = useState<string | null>(null);
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,8 +61,8 @@ export default function ScoreScreenPage() {
     const loadDACHData = useCallback(() => {
         fetch(`https://kiosk.hands-on-technology.org/api/events/${TOURNAMENT_ID}/data/rg-scores`)
             .then((response) => response.json())
-            .then((data) => {
-                setCompetition(new Competition(0, 1, data.name, [data]));
+            .then((data: ScoresResponse) => {
+                setCompetition(data);
             })
             .catch((error) => console.error(error.message));
     }, []);
@@ -100,42 +122,66 @@ export default function ScoreScreenPage() {
         );
     }
 
-    // @ts-expect-error - different data structure when using kiosk API
-    const vr = competition?.categories[0]['rounds'][round];
-    let teams =
-        vr &&
-        Object.keys(vr)
-            ?.map((key) => {
-                const team = vr[key];
-                team.id = key;
+    function createTeams(category: TeamResponse | undefined): Team[] | undefined {
+        if (!category || !round) {
+            return undefined;
+        }
+        const teams = [];
+        for (const id in category) {
+            const team = category[id];
+            team.id = +id;
 
-                const scores = sortScores(team);
-                const realRounds = scores.filter((s) => s > 0).length;
+            const scores = sortScores(team);
+
+            const realRounds = scores.filter((s) => s > 0).length;
                 const maxScore = scores[0];
-                team.scores = team.scores.map((score: Score) => {
-                    score.highlight = +score.points === maxScore && maxScore > 0 && realRounds > 1;
-                    return score;
-                });
-
-                const expectedScores = round === 'VR' ? 3 : 1;
-                while (team.scores.length < expectedScores) {
-                    team.scores.push({ points: 0, highlight: false });
-                }
-
-                return team;
-            })
-            ?.sort((a: Team, b: Team) => {
-                const aScores = sortScores(a);
-                const bScores = sortScores(b);
-
-                for (let i = 0; i < aScores.length && i < bScores.length; i++) {
-                    if (aScores[i] !== bScores[i]) {
-                        return bScores[i] - aScores[i];
-                    }
-                }
-                return 0;
+            team.scores = team.scores.map((score: Score) => {
+                score.highlight = +score.points === maxScore && maxScore > 0 && realRounds > 1;
+                return score;
             });
-    teams = assignRanks(teams);
+
+            while (team.scores.length < expectedScores[round]) {
+                team.scores.push({ points: 0, highlight: false });
+            }
+            teams.push(team);
+        }
+        teams.sort((a: Team, b: Team) => {
+            const aScores = sortScores(a);
+            const bScores = sortScores(b);
+
+            for (let i = 0; i < aScores.length && i < bScores.length; i++) {
+                if (aScores[i] !== bScores[i]) {
+                    return bScores[i] - aScores[i];
+                }
+            }
+            return 0;
+        });
+        return assignRanks(teams);
+    }
+
+    function getRoundToShow(rounds: RoundResponse | undefined): TeamResponse | undefined {
+        if (!rounds) {
+            return undefined;
+        }
+
+        if (rounds.HF) {
+            round = 'HF';
+            return rounds.HF;
+        }
+        if (rounds.VF) {
+            round = 'VF';
+            return rounds.VF;
+        }
+        if (rounds.AF) {
+            round = 'AF';
+            return rounds.AF;
+        }
+        if (rounds.VR) {
+            round = 'VR';
+            return rounds.VR;
+        }
+        return undefined;
+    }
 
     function assignRanks(teams: Team[] | undefined): Team[] | undefined {
         if (!teams || teams.length === 0) {
@@ -163,11 +209,14 @@ export default function ScoreScreenPage() {
         return team.scores.map((score: Score) => +score.points).sort((a, b) => b - a);
     }
 
-    // const teams = competition?.categories[0].teams;
+    let round: Round | undefined;
+    const teams = createTeams(getRoundToShow(competition?.rounds));
 
     return (
         <ScreenContainer settings={settings}>
-            <h1 className="text-gray text-4xl font-bold px-4 py-12 rounded-lg text-center">ROBOT-GAME SCORE: {competition?.name?.toUpperCase()}</h1>
+            <h1 className="text-gray text-4xl font-bold px-4 py-12 rounded-lg text-center">
+                ERGEBNISSE {round && roundNames[round].toUpperCase()}: {competition?.name?.toUpperCase()}
+            </h1>
 
             <div className="text-gray text-5xl rounded-lg p-20">
                 {error && <div className="text-red-500">{error}</div>}

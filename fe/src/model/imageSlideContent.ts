@@ -12,7 +12,7 @@ export class ImageSlideContent extends SlideContent {
     public toJSON(): object {
         return {
             type: "ImageSlideContent",
-            imageUrl: this.imageUrl
+            url: this.imageUrl
         };
     }
 }

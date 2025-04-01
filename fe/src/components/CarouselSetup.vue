@@ -58,9 +58,15 @@ function addSlide() {
   slides.push(new Slide(slides.length + 1, "randomName", new UrlSlideContent("url")));
 }
 
-function updateOrder() {
-  console.log("Updated order:", slides); // Logs new order for debugging
+async function updateOrder() {
+  let d = new FormData
+  d.set("slides", JSON.stringify(slides))
+  const response = await api.post("/api/events/1/slides-order", d)
+  slidesKey.value++
+  //console.log("Updated order:", slides); // Logs new order for debugging
 }
+
+const slidesKey = ref(1)
 
 function deleteSlide(slide) {
   console.log("Deleting slide", slide.title);
@@ -217,7 +223,7 @@ onMounted(fetchSettings)
     <div class="add-slide" @click="chooseNewSlide">
       <fa :icon="['fas', 'plus-circle']"></fa>
     </div>
-    <draggable v-model="slides" class="draggable-list" ghost-class="ghost" group="slides" item-key="id"
+    <draggable v-model="slides" :key="slidesKey" class="draggable-list" ghost-class="ghost" group="slides" item-key="id"
                @end="updateOrder">
       <template #item="{ element }">
         <SlideThumb :slide="element" @deleteSlide="deleteSlide(element)"></SlideThumb>
@@ -228,7 +234,166 @@ onMounted(fetchSettings)
 </template>
 
 <style scoped>
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+h1 {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 2.5rem;
+  color: #4CAF50;
+}
+
 .controls {
+  margin: 20px auto;
+  padding: 20px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+  color: #f1f1f1;
+}
+
+input[type="range"] {
+  width: 100%;
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+select {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #333;
+  color: #f1f1f1;
+  border: none;
+  margin: 5px 0;
+  transition: background-color 0.3s ease;
+}
+
+select:hover {
+  background-color: #444;
+}
+
+.slides-container {
+  margin: 20px auto;
+  padding: 20px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.add-slide {
+  width: 6rem;
+  height: 10rem;
+  background-color: #4CAF50;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 2.5rem;
+  color: white;
+  margin: .5rem;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.add-slide:hover {
+  background-color: #45a049;
+  transform: scale(1.1);
+}
+
+.draggable-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  gap: 10px;
+  background: #2e2e2e;
+  border-radius: 12px;
+}
+
+.slide-thumb {
+  padding: 10px;
+  background: #333;
+  border-radius: 8px;
+  border: 1px solid #555;
+  color: white;
+  text-align: center;
+  transition: transform 0.2s ease;
+  cursor: grab;
+  margin: 5px;
+}
+
+.slide-thumb:hover {
+  transform: scale(1.05);
+}
+
+.ghost {
+  opacity: 0.6;
+}
+
+.chosen {
+  background: #4CAF50;
+}
+
+input[type="text"] {
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #333;
+  color: #f1f1f1;
+  width: 100%;
+  max-width: 300px;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+
+
+/*.controls {
   margin-bottom: 10px;
   padding: 10px;
   background: #f9f9f9;
@@ -265,7 +430,7 @@ onMounted(fetchSettings)
   border: 1px solid #ddd;
   cursor: grab;
   text-align: center;
-}*/
+}
 
 .ghost {
   opacity: 0.5;
@@ -274,4 +439,6 @@ onMounted(fetchSettings)
 .chosen {
   background: lightblue;
 }
+*/
+
 </style>

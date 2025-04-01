@@ -35,8 +35,6 @@ function getFormattedDateTime() {
   return `${year}-${month}-${day}+${hours}:${minutes}`;
 }
 
-let slides = ref([])
-
 let settings = reactive({
   transitionTime: 15,
   transitionEffect: "fade",
@@ -83,7 +81,8 @@ async function fetchSlides() {
     slideKey.value++
   }*/
   loaded.value = true;
-  slides.value.push(new Slide(1, "Test-Scores", new RobotGameSlideContent()));
+  showSlide.value = true;
+  slide.value = new Slide(1, "Test-Scores", new RobotGameSlideContent());
 }
 
 async function fetchSettings() {
@@ -117,7 +116,7 @@ onMounted(fetchSlides)
 
 <template>
   <SlideContentRenderer v-if="showSlide === true" :slide="slide" class="slide"/>
-  <footer>
+  <!-- <footer>
     <div>
       <img :src="logo1_cut" alt="logo">
     </div>
@@ -130,13 +129,13 @@ onMounted(fetchSlides)
     <div>
       <img :src="logo4" alt="logo">
     </div>
-  </footer>
+  </footer> -->
 </template>
 
 <style scoped>
 footer {
   background-color: white;
-  width: 100vw;
+  width: 100%;
   height: 10vh;
   position: fixed;
   z-index: 10000;
@@ -156,8 +155,8 @@ footer img {
 }
 
 .slide {
-  width: 100vw;
-  height: 90vh;
+  width: 100%;
+  height: 100vh;
   position: relative;
   margin: 0;
   padding: 0;

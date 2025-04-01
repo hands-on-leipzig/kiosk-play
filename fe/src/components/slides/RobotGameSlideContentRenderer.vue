@@ -200,7 +200,7 @@ const props = defineProps({
       <table class="scores">
         <thead>
         <tr>
-          <th class="teamName">Team</th>
+          <th>Team</th>
           <template v-if="round === 'VR'">
             <th class="cell">R I</th>
             <th class="cell">R II</th>
@@ -221,7 +221,7 @@ const props = defineProps({
               {{ score.points }}
             </td>
           </template>
-          <td class="px-4 py-2 border-t border-white text-center">{{ team.rank }}</td>
+          <td class="cell">{{ team.rank }}</td>
         </tr>
         </tbody>
       </table>
@@ -231,7 +231,6 @@ const props = defineProps({
 
 <style scoped>
 .slide-container {
-  width: 100%;
   height: 100%;
   position: relative;
   display: flex;
@@ -240,23 +239,23 @@ const props = defineProps({
   justify-content: start;
   background-size: cover;
   background-position: center;
-  margin: 5em;
-  /* TODO: Load background image from server and use url defined by slide content */
-  /*background-image: url('~@/assets/Background.png');*/
-  color: black; /* Use value from settings */
+  padding: 5em;
+  /* TODO: use user-defined values from settings */
+  background-color: black;
+  color: white;
 }
 
 .slide-title {
   font-size: 3rem;
   font-weight: bold;
-  padding: 3rem 1rem 3rem 1rem;
+  padding: 0 1rem 3rem 1rem;
 }
 
 .scores {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 2rem;
+  font-size: 3rem;
 }
 
 th, td {
@@ -265,12 +264,21 @@ th, td {
 
 .teamName {
   border-right: 1px solid white;
-  border-bottom: 1px solid white;
+  border-top: 1px solid white;
   width: auto;
 }
 
 .cell {
   width: 8rem;
   text-align: center;
+}
+
+td {
+  border-top: 1px solid white;
+}
+
+tr > td:not(:last-child),
+tr > th:not(:last-child) {
+  border-right: 1px solid white;
 }
 </style>

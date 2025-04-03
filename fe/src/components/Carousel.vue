@@ -163,5 +163,6 @@ footer img {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  cursor: none;
 }
 </style>

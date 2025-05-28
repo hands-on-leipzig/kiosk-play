@@ -2,9 +2,9 @@
 import {inject, onMounted, reactive, ref} from "vue";
 import SlideThumb from "./SlideThumb.vue";
 import draggable from "vuedraggable";
-import {Slide} from "../model/slide.ts";
-import api from '../services/api';
-import {UrlSlideContent} from "../model/urlSlideContent.js";
+import {Slide} from "../../model/slide.ts";
+import api from '../../services/api.js';
+import {UrlSlideContent} from "../../model/urlSlideContent.ts";
 import ChooseSlideType from "./ChooseSlideType.vue";
 
 const KEYCLOAK_URL = "https://sso.hands-on-technology.org";

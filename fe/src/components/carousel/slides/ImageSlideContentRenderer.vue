@@ -1,5 +1,5 @@
 <script setup>
-import {ImageSlideContent} from '../../model/imageSlideContent.ts';
+import {ImageSlideContent} from '../../../model/imageSlideContent.ts';
 
 const props = defineProps({
   content: ImageSlideContent

@@ -7,6 +7,7 @@ require_once '../vendor/autoload.php';
 use controllers;
 use Exception;
 use model\MysqlDB;
+use model\Router;
 
 $db = new MysqlDB();
 $db->dbConnect();
@@ -21,29 +22,44 @@ $h->post('/api/auth', function () {
     echo $t->getJWTToken($_POST["code"]);
 });
 
-// TODO remove the following
-$h->get('/api/scheduler/schedule/$schedule_id', function ($schedule_id) {
-    $s = new controllers\ScheduleController();
-
-    try {
-        $scores = json_encode($s->getScores($event_id));
-    } catch (Exception $e) {
-        http_response_code($e->getCode());
-        exit($e->getMessage());
-    }
-    if (json_validate($scores)) {
-        header("Content-Type: application/json");
-    }
-    echo $scores;
-});
-
 // endpoints needing authorization
 try {
-    $h->auth();
+    $auth = $h->auth();
+    var_dump($auth);
 } catch (Exception $e) {
     http_response_code($e->getCode());
     exit($e->getMessage());
 }
+
+$h->get('/api/scheduler/schedule/$schedule_id', function ($plan_id) {
+    $s = new controllers\PlanController();
+
+    try {
+        $result = json_encode($s->getPlan($plan_id));
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+    if (json_validate($result)) {
+        header("Content-Type: application/json");
+    }
+    echo $result;
+});
+
+$h->get('/api/scheduler/schedule/$schedule_id/params', function ($plan_id) {
+    $s = new controllers\PlanController();
+
+    try {
+        $result = json_encode($s->getParams($plan_id));
+    } catch (Exception $e) {
+        http_response_code($e->getCode());
+        exit($e->getMessage());
+    }
+    if (json_validate($result)) {
+        header("Content-Type: application/json");
+    }
+    echo $result;
+});
 
 $h->post('/api/events/$event_id/settings', function ($event_id) {
     $s = new controllers\SettingController($event_id);

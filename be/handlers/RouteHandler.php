@@ -64,7 +64,8 @@ $h->get('/api/events/$event_id/slides', function ($event_id) {
 
 // endpoints needing authorization
 try {
-    $h->auth();
+    $auth = $h->auth();
+    var_dump($auth);
 } catch (Exception $e) {
     http_response_code($e->getCode());
     exit($e->getMessage());

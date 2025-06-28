@@ -23,7 +23,7 @@ class TokenController
             "client_id" => $_ENV["CLIENT_ID"],
             "client_secret" => $_ENV["CLIENT_SECRET"],
             "code" => $code,
-            "redirect_uri" => "https://kiosk.hands-on-technology.org/auth"
+            "redirect_uri" => "https://kiosk.hands-on-technology.org/auth",
         ];
 
         $ch = curl_init();

@@ -2,9 +2,9 @@
 import {inject, onMounted, reactive, ref} from "vue";
 import SlideThumb from "./SlideThumb.vue";
 import draggable from "vuedraggable";
-import {Slide} from "../model/slide.ts";
-import api from '../services/api';
-import {UrlSlideContent} from "../model/urlSlideContent.js";
+import {Slide} from "../../model/slide.ts";
+import api from '../../services/api.js';
+import {UrlSlideContent} from "../../model/urlSlideContent.ts";
 import ChooseSlideType from "./ChooseSlideType.vue";
 
 const KEYCLOAK_URL = "https://sso.hands-on-technology.org";
@@ -18,7 +18,7 @@ const redirectToKeycloak = () => {
 
 let newSlide = ref(false)
 
-function isValidJwt(token) {
+/*function isValidJwt(token) {
   if (!token) return false;
 
   try {
@@ -38,13 +38,46 @@ function isValidJwt(token) {
     console.error("Invalid JWT token:", e.message);
     return false;
   }
+}*/
+
+function parseJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+        atob(base64)
+            .split('')
+            .map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0'))
+            .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
+
+function isJwtExpired(token) {
+  const payload = parseJwt(token);
+  if (!payload || !payload.exp) return true;
+
+  const now = Math.floor(Date.now() / 1000); // current Unix time in seconds
+  return payload.exp < now;
+}
+
+function isJwtValid(token) {
+  if (!token || token.split('.').length !== 3) return false;
+
+  const payload = parseJwt(token);
+  if (!payload || !payload.exp) return false;
+
+  return !isJwtExpired(token);
 }
 
 // Check if user is logged in
 const checkAuth = () => {
   if (document.location.host === "localhost:5173") return true;
   const token = localStorage.getItem("jwt_token");
-  if (!token || !isValidJwt(token)) {
+  if (!token || !isJwtValid(token)) {
     redirectToKeycloak();
   }
 };

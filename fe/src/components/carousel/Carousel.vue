@@ -2,16 +2,16 @@
 import '@splidejs/vue-splide/css';
 import {inject, onMounted, reactive, ref} from "vue";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
-import logo1_cut from "../assets/img/logo1_cut.png";
-import logo2_cut from "../assets/img/logo2_cut.png";
-import logo3_cut from "../assets/img/logo3_cut.png";
-import logo4 from "../assets/img/logo4.png";
-import api from "../services/api.js";
-import {Slide} from "../model/slide.js";
-import {ImageSlideContent} from "../model/imageSlideContent.js";
-import {RobotGameSlideContent} from "../model/robotGameSlideContent.js";
-import {UrlSlideContent} from "../model/urlSlideContent.js";
-import {SlideContent} from "../model/slideContent.js";
+import logo1_cut from "../../assets/img/logo1_cut.png";
+import logo2_cut from "../../assets/img/logo2_cut.png";
+import logo3_cut from "../../assets/img/logo3_cut.png";
+import logo4 from "../../assets/img/logo4.png";
+import api from "../../services/api.js";
+import {Slide} from "../../model/slide.ts";
+import {ImageSlideContent} from "../../model/imageSlideContent.ts";
+import {RobotGameSlideContent} from "../../model/robotGameSlideContent.ts";
+import {UrlSlideContent} from "../../model/urlSlideContent.ts";
+import {SlideContent} from "../../model/slideContent.ts";
 
 const socket = inject('websocket');
 socket.registerClient();

@@ -1,5 +1,5 @@
 <script setup>
-import {Slide as Slide} from "../model/slide.ts";
+import {Slide as Slide} from "../../model/slide.ts";
 import SlideContentRenderer from "./slides/SlideContentRenderer.vue";
 
 const props = defineProps({

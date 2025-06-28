@@ -1,11 +1,11 @@
 <script setup>
 
-import {ImageSlideContent} from "../model/imageSlideContent.js";
-import {RobotGameSlideContent} from "../model/robotGameSlideContent.js";
-import {UrlSlideContent} from "../model/urlSlideContent.js";
+import {ImageSlideContent} from "../../model/imageSlideContent.ts";
+import {RobotGameSlideContent} from "../../model/robotGameSlideContent.ts";
+import {UrlSlideContent} from "../../model/urlSlideContent.ts";
 import {ref} from "vue";
-import api from "../services/api.js";
-import {Slide} from "../model/slide.js";
+import api from "../../services/api.js";
+import {Slide} from "../../model/slide.ts";
 
 let types = {
   image: new ImageSlideContent("").toJSON().type,

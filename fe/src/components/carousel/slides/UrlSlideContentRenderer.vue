@@ -1,5 +1,5 @@
 <script setup>
-import {UrlSlideContent} from "../../model/urlSlideContent.js";
+import {UrlSlideContent} from "../../../model/urlSlideContent.ts";
 
 const props = defineProps({
   content: UrlSlideContent,

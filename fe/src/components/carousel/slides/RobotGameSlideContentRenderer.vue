@@ -1,5 +1,5 @@
 <script setup>
-import {RobotGameSlideContent} from '../../model/robotGameSlideContent.js';
+import {RobotGameSlideContent} from '../../../model/robotGameSlideContent.ts';
 
 const props = defineProps({
   content: RobotGameSlideContent

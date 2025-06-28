@@ -2,10 +2,10 @@
 import {computed} from 'vue';
 import ImageSlideContentRenderer from './ImageSlideContentRenderer.vue';
 import RobotGameSlideContentRenderer from './RobotGameSlideContentRenderer.vue';
-import {ImageSlideContent} from "../../model/imageSlideContent.js";
-import {Slide} from "../../model/slide.js";
-import {RobotGameSlideContent} from "../../model/robotGameSlideContent.js";
-import {UrlSlideContent} from "../../model/urlSlideContent.js";
+import {ImageSlideContent} from "../../../model/imageSlideContent.ts";
+import {Slide} from "../../../model/slide.ts";
+import {RobotGameSlideContent} from "../../../model/robotGameSlideContent.ts";
+import {UrlSlideContent} from "../../../model/urlSlideContent.ts";
 import UrlSlideContentRenderer from "./UrlSlideContentRenderer.vue";
 
 const props = defineProps({

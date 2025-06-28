@@ -18,7 +18,7 @@ const redirectToKeycloak = () => {
 
 let newSlide = ref(false)
 
-/*function isValidJwt(token) {
+function isValidJwt(token) {
   if (!token) return false;
 
   try {
@@ -38,8 +38,8 @@ let newSlide = ref(false)
     console.error("Invalid JWT token:", e.message);
     return false;
   }
-}*/
-
+}
+/*
 function parseJwt(token) {
   try {
     const base64Url = token.split('.')[1];
@@ -65,19 +65,22 @@ function isJwtExpired(token) {
 }
 
 function isJwtValid(token) {
+  console.log("ey")
+  console.log(token)
+  console.log(token.split('.'))
   if (!token || token.split('.').length !== 3) return false;
-
+console.log("length ok")
   const payload = parseJwt(token);
   if (!payload || !payload.exp) return false;
-
+console.log("parsing ok")
   return !isJwtExpired(token);
 }
-
+*/
 // Check if user is logged in
 const checkAuth = () => {
-  if (document.location.host === "localhost:5173") return true;
+  //if (document.location.host === "localhost:5173") return true;
   const token = localStorage.getItem("jwt_token");
-  if (!token || !isJwtValid(token)) {
+  if (!token || !isValidJwt(token)) {
     redirectToKeycloak();
   }
 };

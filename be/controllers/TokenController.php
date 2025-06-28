@@ -23,7 +23,7 @@ class TokenController
             "client_id" => $_ENV["CLIENT_ID"],
             "client_secret" => $_ENV["CLIENT_SECRET"],
             "code" => $code,
-            "redirect_uri" => "http://localhost:5173/callback"
+            "redirect_uri" => "https://kiosk.hands-on-technology.org/auth"
         ];
 
         $ch = curl_init();
@@ -40,20 +40,10 @@ class TokenController
             exit;
         }
 
+
         $jwt_payload = [
-            "sub" => $keycloak_response["sub"],
-            "username" => $keycloak_response["preferred_username"],
-            "exp" => time() + 3600 // Token expires in 1 hour
-        ];
-        $jwt_payload = [
-            "iss" => "your-issuer",        // Issuer (who issued the token)
-            "aud" => "your-audience",      // Audience (who the token is intended for)
-            "iat" => time(),               // Issued At (current time)
-            "exp" => time() + 3600,        // Expiration Time (1 hour from now)
-            "data" => [                    // Custom Payload Data
-                "user_id" => 123,
-                "username" => "john_doe"
-            ]
+            "exp" => $keycloak_response["expires_in"],
+            "access_token" => $keycloak_response["access_token"],
         ];
 
         return JWT::encode($jwt_payload, $_ENV["JWT_SECRET"], 'HS256');

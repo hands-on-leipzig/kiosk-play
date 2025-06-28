@@ -65,10 +65,99 @@ async function fetchSchedule() {
 </script>
 
 <template>
-  <div v-text="id"></div>
-<object></object>
+  <div class="plan-editor">
+    <h2>Plan bearbeiten: {{ plan.name }}</h2>
+
+    <form @submit.prevent="savePlanName">
+      <input v-model="plan.name" placeholder="Planname" />
+      <button type="submit">Speichern</button>
+    </form>
+
+    <div>
+      <h3>Parameter</h3>
+      <label v-for="(val, key) in params.values" :key="key">
+        {{ key }}
+        <input v-model="params.values[key]" />
+      </label>
+      <button @click="updateParams">Parameter speichern</button>
+    </div>
+
+    <div>
+      <h3>Aktionen</h3>
+      <button @click="generatePlan">Zeitplan generieren</button>
+    </div>
+
+    <div>
+      <h3>Vorschau</h3>
+      <iframe :src="previewUrl" width="100%" height="600"></iframe>
+    </div>
+  </div>
 </template>
 
-<style scoped>
+<script>
+export default {
+  name: 'PlanEditor',
+  props: {
+    planId: {
+      type: Number,
+      required: true
+    }
+  },
+  data() {
+    return {
+      plan: {},
+      params: {
+        values: {}
+      },
+      previewUrl: ''
+    };
+  },
+  methods: {
+    async loadData() {
+      const res = await fetch(`/api/plan.load.php?id=${this.planId}`);
+      const data = await res.json();
+      this.plan = data.plan;
+      this.params = data.params;
+      this.previewUrl = `/output/zeitplan.cgi?plan=${this.planId}`;
+    },
+    async savePlanName() {
+      await fetch('/api/plan.save.php', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: this.planId,
+          name: this.plan.name
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+    },
+    async updateParams() {
+      await fetch('/api/plan.update_params.php', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: this.planId,
+          values: this.params.values
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+    },
+    async generatePlan() {
+      await fetch('/api/plan.generate.php', {
+        method: 'POST',
+        body: JSON.stringify({ id: this.planId }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      // Reload preview
+      this.previewUrl = `/output/zeitplan.cgi?plan=${this.planId}&t=${Date.now()}`;
+    }
+  },
+  mounted() {
+    this.loadData();
+  }
+};
+</script>
 
+<style scoped>
+.plan-editor {
+  padding: 1rem;
+}
 </style>

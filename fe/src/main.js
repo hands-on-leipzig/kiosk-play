@@ -11,7 +11,7 @@ import CarouselSetup from "./components/carousel/CarouselSetup.vue";
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faEarth, faImage, faPlusCircle, faTrashCan} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {sendMessage} from "./components/websocket/SlideSocket.js";
+//import {sendMessage} from "./components/websocket/SlideSocket.js";
 import ScheduleEditor from "./components/scheduler/ScheduleEditor.vue";
 
 library.add(faPlusCircle, faTrashCan, faImage, faEarth);

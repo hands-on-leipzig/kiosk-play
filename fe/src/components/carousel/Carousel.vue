@@ -13,7 +13,7 @@ import {RobotGameSlideContent} from "../../model/robotGameSlideContent.ts";
 import {UrlSlideContent} from "../../model/urlSlideContent.ts";
 import {SlideContent} from "../../model/slideContent.ts";
 
-const socket = inject('websocket');
+/*const socket = inject('websocket');
 socket.registerClient();
 socket.addListener((msg) => {
   if (msg.type === 'pushSlide') {
@@ -21,7 +21,7 @@ socket.addListener((msg) => {
     showSlide.value = true
   }
 });
-
+*/
 function getFormattedDateTime() {
   const now = new Date();
 

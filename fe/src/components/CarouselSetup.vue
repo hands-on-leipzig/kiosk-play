@@ -30,9 +30,12 @@ function isValidJwt(token) {
     const payload = JSON.parse(atob(payloadBase64));
 
     // Check for expiration timestamp (exp)
-    const expiration = payload.exp * 1000; // Convert to milliseconds
-    const now = Date.now();
+    const expiration = payload.iss + payload.exp * 1000; // Convert to milliseconds
+    const now = Date.now() / 1000;
 
+    console.log(expiration)
+    console.log(payload)
+    console.log(now)
     return expiration > now;
   } catch (e) {
     console.error("Invalid JWT token:", e.message);

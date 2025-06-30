@@ -33,7 +33,9 @@ function isValidJwt(token) {
     const expiration = payload.iss + payload.exp * 1000; // Convert to milliseconds
     const now = Date.now();
 
-
+    console.log(expiration)
+    console.log(payload)
+    console.log(now)
     return expiration > now;
   } catch (e) {
     console.error("Invalid JWT token:", e.message);

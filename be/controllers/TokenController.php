@@ -39,9 +39,7 @@ class TokenController
             echo json_encode(["error" => "Invalid authentication"]);
             exit;
         }
-
-        var_dump($keycloak_response);
-
+        
         $jwt_payload = [
             "exp" => $keycloak_response["expires_in"],
             "iss" => time(),

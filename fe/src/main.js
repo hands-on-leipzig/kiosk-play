@@ -30,7 +30,7 @@ const router = createRouter({
 
 const app = createApp(App)
 
-app.provide('sendMessage', sendMessage);
+//app.provide('sendMessage', sendMessage);
 app.use(VueSplide)
 app.use(router)
 app.component('fa', FontAwesomeIcon);

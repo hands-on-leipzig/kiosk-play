@@ -31,7 +31,7 @@ function isValidJwt(token) {
 
     // Check for expiration timestamp (exp)
     const expiration = payload.iss + payload.exp * 1000; // Convert to milliseconds
-    const now = Date.now();
+    const now = Date.now() / 1000;
 
     console.log(expiration)
     console.log(payload)

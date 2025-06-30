@@ -40,9 +40,11 @@ class TokenController
             exit;
         }
 
+        var_dump($keycloak_response);
 
         $jwt_payload = [
             "exp" => $keycloak_response["expires_in"],
+            "iss" => time(),
             "access_token" => $keycloak_response["access_token"],
         ];
 

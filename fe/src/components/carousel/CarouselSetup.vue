@@ -30,8 +30,9 @@ function isValidJwt(token) {
     const payload = JSON.parse(atob(payloadBase64));
 
     // Check for expiration timestamp (exp)
-    const expiration = payload.exp * 1000; // Convert to milliseconds
+    const expiration = payload.iss + payload.exp * 1000; // Convert to milliseconds
     const now = Date.now();
+
 
     return expiration > now;
   } catch (e) {
